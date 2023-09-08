@@ -8,7 +8,7 @@ import time
 import pytest
 
 
-chrome_driver_path = "C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe"
+chrome_driver_path = "C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe"
 driver_service = webdriver.chrome.service.Service(executable_path=chrome_driver_path)
 driver = webdriver.Chrome(service=driver_service)
 driver.maximize_window()
