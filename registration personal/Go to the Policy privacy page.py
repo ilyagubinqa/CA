@@ -13,7 +13,7 @@ driver.maximize_window()
 driver.get('https://app.staging1.clickadilla.com/register')
 
 # Ожидание появления полей ввода
-wait = WebDriverWait(driver, 15)
+wait = WebDriverWait(driver, 16)
 policy = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[3]/div[1]/span[2]/a')))
 policy.click()
 
