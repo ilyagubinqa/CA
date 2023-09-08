@@ -10,6 +10,9 @@ import pytest
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe")
 driver = webdriver.Chrome()
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = "C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe"
+driver = webdriver.Chrome(options=chrome_options)
 driver.maximize_window()
 driver.get('https://app.staging1.clickadilla.com/register')
 
