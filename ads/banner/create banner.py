@@ -5,12 +5,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 import time
-
-
+import pyautogui
 
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(service=driver_service)
 driver.maximize_window()
 driver.get('https://app.staging1.clickadilla.com/login')
 
@@ -41,7 +40,7 @@ size = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//
 size.click()
 url = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div/div[2]/div/div/div[2]/div/div[5]/div[2]/div/div/div/div/div[1]/div[1]/div[2]/div/div[1]/div')))
 url.click()
-url.send_keys('test_selenium04@gmail.com')
+pyautogui.typewrite('https://app.clickadilla.com')
 time.sleep(3)
 
 # Загрузка файла для креатива
