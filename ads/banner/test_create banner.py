@@ -1,3 +1,5 @@
+import os
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -7,6 +9,7 @@ from time import sleep
 import time
 import pyautogui
 
+os.environ['DISPLAY'] = ':0'
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
 driver = webdriver.Chrome(service=driver_service)
