@@ -8,7 +8,7 @@ import time
 import pyautogui
 
 # Открытие браузера и переход на страницу регистрации
-driver_service = Service(executable_path="C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe")
+driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
 driver = webdriver.Chrome(service=driver_service)
 driver.maximize_window()
 driver.get('https://app.staging1.clickadilla.com/login')
@@ -45,7 +45,7 @@ time.sleep(3)
 
 # Загрузка файла для креатива
 image = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//input[@type = 'file']")))
-image.send_keys("C:\PycharmProjects\img\jpeg2.jpg")
+image.send_keys("C:\\PycharmProjects\\img\\jpeg2.jpg")
 done = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'doka--button-action-confirm') and span[text()='Done']]")))
 done.click()
 time.sleep(15)

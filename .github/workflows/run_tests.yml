@@ -18,6 +18,7 @@ jobs:
         run:
           pip install pytest
           pip install selenium
+          pipi install pyautogui
       - name: Install Chrome
         run:
           sudo apt-get install google-chrome-stable
