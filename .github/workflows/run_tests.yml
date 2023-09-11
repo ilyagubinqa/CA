@@ -34,4 +34,5 @@ jobs:
           sudo apt-get install google-chrome-stable
 
       - name: Run tests
-        run: pytest path/to/your/tests
+        run:
+          pytest
