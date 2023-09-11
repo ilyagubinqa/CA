@@ -9,7 +9,7 @@ from time import sleep
 import time
 import pyautogui
 
-os.environ['DISPLAY'] = '99'
+os.environ['DISPLAY'] = '98'
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
 driver = webdriver.Chrome(service=driver_service)
