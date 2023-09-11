@@ -20,7 +20,6 @@ jobs:
         run: |
           pip install pytest
           pip install selenium
-          pip install pyautogui
 
       - name: Install Chrome
         run: |
