@@ -31,3 +31,6 @@ else:
     print("Переход на страницу Privacy Policy не произошел")
 
 sleep(25)
+
+
+pyautogui.typewrite
