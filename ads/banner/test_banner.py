@@ -6,7 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 import time
 
-
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
 driver = webdriver.Chrome()
