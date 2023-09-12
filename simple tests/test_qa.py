@@ -25,4 +25,3 @@ def test_button1_clicked(browser):
 def test_button2_exist(browser):
     browser.get('https://www.qa-practice.com/elements/button/like_a_button')
     assert browser.find_element(By.LINK_TEXT, 'Click').is_displayed()
-
