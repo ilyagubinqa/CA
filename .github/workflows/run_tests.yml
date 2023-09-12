@@ -17,12 +17,12 @@ jobs:
           python-version: "3.10"
 
       - name: Install dependencies
-        run:
+        run: |
           pip install pytest
           pip install selenium
 
       - name: Install Chrome
-        run:
+        run: |
           sudo apt-get update
           sudo apt-get install google-chrome-stable
 
