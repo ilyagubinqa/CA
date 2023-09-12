@@ -6,18 +6,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Инициализация драйвера и переход на страницу логина
-driver_service = Service(executable_path="C://chromedriver.exe")
-driver = webdriver.Chrome(service=driver_service)
+# Открытие браузера и переход на страницу регистрации
+driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
+driver = webdriver.Chrome()
 driver.maximize_window()
-driver.get('https://staging-app.clickadilla.com/login')
+driver.get('https://app.staging1.clickadilla.com/login')
 
 # Ожидание появления полей и ввод данных для авторизации
 wait = WebDriverWait(driver, 55)
 login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-login_input.send_keys('test@test.ru')
-login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-login_input.send_keys('secret')
+login_input.send_keys('test_selenium04@gmail.com')
+password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
+password_input.send_keys('test_selenium04@gmail.com')
+send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
+send_button.click()
 
 # Отправка данных для авторизации и вход в личный кабинет
 send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
@@ -26,7 +28,7 @@ send_button.click()
 time.sleep(15)
 
 # Проверяем, что произошел вход в личный кабинет
-expected_url = 'https://staging-app.clickadilla.com/dashboard'
+expected_url = 'https://app.staging1.clickadilla.com/dashboard'
 print(expected_url)
 current_url = driver.current_url
 
