@@ -22,7 +22,7 @@ policy = driver.find_element(By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[
 policy.click()
 
 # Добавляем задержку в 25 секунд перед проверкой URL
-time.sleep(2)
+time.sleep(3)
 
 # Проверяем, что произошел переход на страницу Privacy Policy
 expected_url = 'https://clickadilla.com/privacy-policy'
