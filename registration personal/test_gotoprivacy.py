@@ -10,7 +10,7 @@ import pytest
 
 # Опции для запуска в режиме headless
 options = Options()
-options.add_argument('--headless')  # Включаем headless режим
+options.add_argument('--headless')
 
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
@@ -19,9 +19,8 @@ driver.get('https://app.staging1.clickadilla.com/register')
 
 # Ожидание появления полей ввода
 wait = WebDriverWait(driver, 20)
-policy = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[3]/div[1]/span[2]/a')))
+policy = driver.find_element(By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[3]/div[1]/span[2]/a')
 policy.click()
-
 
 # Добавляем задержку в 25 секунд перед проверкой URL
 time.sleep(3)
