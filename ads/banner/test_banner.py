@@ -10,7 +10,7 @@ import pytest
 
 # Опции для запуска в режиме headless
 options = Options()
-options.add_argument('--headless')  # Включаем headless режим
+options.add_argument('--headless')
 
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
