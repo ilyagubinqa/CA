@@ -8,13 +8,9 @@ from selenium.webdriver.chrome.options import Options
 import time
 import pytest
 
-# Опции для запуска в режиме headless
-options = Options()
-options.add_argument('--headless')
-
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(options=driver_service)
 driver.get('https://app.staging1.clickadilla.com/login')
 
 # Ожидание появления полей и ввод данных для авторизации
