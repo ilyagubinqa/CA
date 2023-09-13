@@ -4,8 +4,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
+from selenium.webdriver.chrome.options import Options
 import time
 import pytest
+
+# Опции для запуска в режиме headless
+chrome_options = Options()
+chrome_options.add_argument('--headless')  # Включаем headless режим
 
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
