@@ -18,7 +18,8 @@ driver = webdriver.Chrome(options=options)
 driver.get('https://app.staging1.clickadilla.com/register')
 
 # Ожидание появления полей ввода
-policy = driver.find_element(By.XPATH, '/html/body/div[1]/div/main/div/div/div/div[3]/div[1]/span[2]/a')
+wait = WebDriverWait(driver, 20)
+policy = driver.find_element(By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[3]/div[1]/span[2]/a')
 policy.click()
 
 # Добавляем задержку в 25 секунд перед проверкой URL
