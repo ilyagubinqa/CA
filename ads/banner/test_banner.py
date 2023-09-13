@@ -9,12 +9,12 @@ import time
 import pytest
 
 # Опции для запуска в режиме headless
-chrome_options = Options()
-chrome_options.add_argument('--headless')  # Включаем headless режим
+options = Options()
+options.add_argument('--headless')  # Включаем headless режим
 
 # Открытие браузера и переход на страницу регистрации
 driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(options=options)
 driver.get('https://app.staging1.clickadilla.com/login')
 
 # Ожидание появления полей и ввод данных для авторизации
