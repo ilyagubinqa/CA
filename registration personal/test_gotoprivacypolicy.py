@@ -4,12 +4,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
+from selenium.webdriver.chrome.options import Options
 import time
+import pytest
+
+# Опции для запуска в режиме headless
+options = Options()
+options.add_argument('--headless')  # Включаем headless режим
 
 # Открытие браузера и переход на страницу регистрации
-driver_service = Service(executable_path="C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe")
-driver = webdriver.Chrome(service=driver_service)
-driver.maximize_window()
+driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
+driver = webdriver.Chrome(options=options)
 driver.get('https://app.staging1.clickadilla.com/register')
 
 # Ожидание появления полей ввода
@@ -31,6 +36,3 @@ else:
     print("Переход на страницу Privacy Policy не произошел")
 
 sleep(25)
-
-
-pyautogui.typewrite
