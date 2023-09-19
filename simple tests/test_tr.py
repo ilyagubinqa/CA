@@ -8,7 +8,7 @@ import pytest
 def browser():
     driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
     chrome_browser = webdriver.Chrome(service=driver_service)
-    chrome_browser.implicitly_wait(11)
+    chrome_browser.implicitly_wait(10)
     return chrome_browser
 
 
