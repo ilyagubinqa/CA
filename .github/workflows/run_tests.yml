@@ -26,7 +26,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install google-chrome-stable
           sudo apt-get install chromium-chromedriver
-          sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
 
       - name: Set DISPLAY variable
         run: export DISPLAY=:99
