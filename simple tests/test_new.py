@@ -15,7 +15,7 @@ options.add_argument('--headless')
 def browser():
     driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
     chrome_browser = webdriver.Chrome(service=driver_service, options=options)
-    chrome_browser.implicitly_wait(10)
+    chrome_browser.implicitly_wait(12)
     return chrome_browser
 
 def test_button1_exist(browser):
