@@ -39,6 +39,10 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
+      - name: Set chromedriver path
+        run: |
+          echo "export CHROMEDRIVER_PATH=/usr/local/bin/chromedriver" >> $GITHUB_ENV
+
       - name: Run tests
         run:
           pytest
