@@ -9,33 +9,25 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
           pip install pytest
           pip install selenium
-
-      - name: Install Chrome and ChromeDriver
-        run: |
           sudo apt-get update
-          sudo apt-get install google-chrome-stable
-          sudo apt-get install chromium-chromedriver
+          sudo apt-get install -y chromium-chromedriver
+          sudo ln -sf /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
 
-      - name: Set DISPLAY variable
-        run: export DISPLAY=:99
-
-      - name: Install Xvfb
-        run: sudo apt-get install xvfb
-
-      - name: Start Xvfb
+      - name: Run Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
       - name: Run tests
-        run:
+        run: |
+          export DISPLAY=:99
           pytest
