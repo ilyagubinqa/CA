@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 import time
 import pytest
 from selenium.webdriver import Chrome
-from webdriver_manager.chrome import ChromeDriverManager
+
 
 
 # Опции для запуска в режиме headless
