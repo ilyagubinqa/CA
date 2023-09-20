@@ -17,9 +17,11 @@ options.add_argument('--headless')
 
 @pytest.fixture()
 def browser():
-    url = "https://app.staging1.clickadilla.com/login"
-    driver = webdriver.Chrome()
-    driver.get(url)
+    driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
+    chrome_browser = webdriver.Chrome(service=driver_service)
+    chrome_browser.implicitly_wait(10)
+    return chrome_browser
+
 def test_button1_exist(browser):
     browser.get('https://app.staging1.clickadilla.com/login')
     assert browser.find_element(By.CLASS_NAME, "v-btn__content").is_displayed()
