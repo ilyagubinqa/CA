@@ -7,6 +7,8 @@ from time import sleep
 from selenium.webdriver.chrome.options import Options
 import time
 import pytest
+from selenium.webdriver import Chrome
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Опции для запуска в режиме headless
 options = Options()
@@ -14,9 +16,10 @@ options.add_argument('--headless')
 
 @pytest.fixture()
 def browser():
-    service = webdriver.ChromeService(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
-    driver = webdriver.Chrome(service=service)
-
+    driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
+    chrome_browser = webdriver.Chrome(service=driver_service)
+    chrome_browser.implicitly_wait(10)
+    return chrome_browser
 
 def test_button1_exist(browser):
     browser.get('https://app.staging1.clickadilla.com/login')
