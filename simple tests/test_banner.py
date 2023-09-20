@@ -32,7 +32,7 @@ def test_create_banner(browser):
     send_button.click()
 
     # Переход в раздел Ads
-    wait = WebDriverWait(browser, 30)
+    wait = WebDriverWait(browser, 31)
     element = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//a[@href='/ads']")))
     element.click()
 

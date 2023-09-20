@@ -25,7 +25,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install google-chrome-stable
-          
+      - name: Install pyautogui
+        run: |
+          pip install pyautogui
 
       - name: Set DISPLAY variable
         run: export DISPLAY=:99
