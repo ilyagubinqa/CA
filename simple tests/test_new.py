@@ -3,13 +3,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
 from selenium.webdriver.chrome.options import Options
 import time
 import pytest
-from selenium.webdriver import Chrome
-
-
 
 # Опции для запуска в режиме headless
 options = Options()
@@ -18,7 +14,7 @@ options.add_argument('--headless')
 @pytest.fixture()
 def browser():
     driver_service = Service(executable_path="C:\\Program Files\\Webdriver\\chromedriver-win64\\chromedriver.exe")
-    chrome_browser = webdriver.Chrome(service=driver_service)
+    chrome_browser = webdriver.Chrome(service=driver_service, options=options)
     chrome_browser.implicitly_wait(15)
     return chrome_browser
 
