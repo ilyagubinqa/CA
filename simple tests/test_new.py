@@ -10,6 +10,7 @@ import pytest
 from selenium.webdriver import Chrome
 from webdriver_manager.chrome import ChromeDriverManager
 
+
 # Опции для запуска в режиме headless
 options = Options()
 options.add_argument('--headless')
