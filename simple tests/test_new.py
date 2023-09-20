@@ -17,10 +17,9 @@ options.add_argument('--headless')
 
 @pytest.fixture()
 def browser():
-    driver_service = Service(executable_path="C:\\Program Files\\PycharmProjects\\chromedriver.exe")
-    chrome_browser = webdriver.Chrome(service=driver_service)
-    chrome_browser.implicitly_wait(10)
-    return chrome_browser
+    service = Service(executable_path='./chromedriver')
+    driver = webdriver.Chrome(service=service)
+
 
 def test_button1_exist(browser):
     browser.get('https://app.staging1.clickadilla.com/login')
