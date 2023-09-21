@@ -46,7 +46,7 @@ jobs:
       - name: Send Slack notification
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "GitHub Actions Test Results: ${{ job.status }}",
+            "text": "Automated Test Results: ${{ job.status }}",
             "attachments": [
               {
                 "text": "The workflow ${{ github.workflow }} has completed with ${{ job.status }} status."
