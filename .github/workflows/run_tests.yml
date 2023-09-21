@@ -31,7 +31,7 @@ jobs:
           pip install pyautogui
 
       - name: Set DISPLAY variable
-        run: export DISPLAY=:99
+        run: echo "DISPLAY=:99" >> $GITHUB_ENV
 
       - name: Install Xvfb
         run: sudo apt-get install xvfb
