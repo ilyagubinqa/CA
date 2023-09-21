@@ -31,7 +31,7 @@ def test_login(browser):
     send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
     send_button.click()
 
-    time.sleep(15)
+    time.sleep(17)
 
     # Проверяем, что произошел вход в личный кабинет
     expected_url = 'https://app.staging1.clickadilla.com/dashboard'

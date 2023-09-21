@@ -42,3 +42,14 @@ jobs:
       - name: Run tests
         run:
           pytest
+
+      - name: Send Slack notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "GitHub Actions Test Results: ${{ job.status }}",
+            "attachments": [
+              {
+                "text": "The workflow ${{ github.workflow }} has completed with ${{ job.status }} status."
+              }
+            ]
+          }' https://hooks.slack.com/services/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
