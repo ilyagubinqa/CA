@@ -45,11 +45,4 @@ jobs:
 
       - name: Send Slack notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "Automated Test Results: ${{ job.status }}",
-            "attachments": [
-              {
-                "text": "The workflow ${{ github.workflow }} has completed with ${{ job.status }} status."
-              }
-            ]
-          }' https://hooks.slack.com/services/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
+          curl -X POST --data-urlencode "payload={\"channel\": \"#clickadilla-autotest\", \"username\": \"webhookbot\", \"text\": \"GitHub Actions Test Results: ${{ job.status }}\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/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
