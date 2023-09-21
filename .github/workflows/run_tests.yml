@@ -45,7 +45,7 @@ jobs:
 
       - name: Send Slack notification
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{
+          curl -X POST --data-urlencode "payload={\"channel": \"#clickadilla-autotests\", \"username\": \"webhookbot\",
             "text": "Automated Test Results: ${{ job.status }}",
             "attachments": [
               {
