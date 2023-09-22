@@ -52,4 +52,4 @@ jobs:
                 "text": "The workflow ${{ github.workflow }} has completed with ${{ job.status }} status."
               }
             ]
-          }' https://hooks.slack.com/services/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
+          }' https://hooks.slack.com/services/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
