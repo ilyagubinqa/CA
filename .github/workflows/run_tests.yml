@@ -45,4 +45,4 @@ jobs:
 
       - name: Send Slack notification
         run: |
-          curl -X POST --data-urlencode "payload={\"channel\": \"#clickadilla-autotest\", \"username\": \"automated tests\", \"text\": \"This is posted to #clickadilla-autotests and comes from a bot named automated tests.\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/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
+          curl -X POST --data-urlencode "payload={\"channel\": \"C05TED9QSNQ\", \"username\": \"automated tests\", \"text\": \"This is posted to #clickadilla-autotests and comes from a bot named automated tests.\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/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
