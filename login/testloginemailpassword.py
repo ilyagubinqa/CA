@@ -35,7 +35,6 @@ def test_login(browser):
 
     # Проверяем, что произошел вход в личный кабинет
     expected_url = 'https://app.staging1.clickadilla.com/dashboard'
-    print(expected_url)
     current_url = browser.current_url
 
     if current_url == expected_url:
