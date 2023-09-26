@@ -44,9 +44,7 @@ jobs:
           pytest
 
       - name: Send Slack notifications
-        run: |
-            curl --location 'https://hooks.slack.com/services/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' \
-            --header 'Content-Type: application/json' \
-            --data '{
-            "text": "test"
-            }'
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
