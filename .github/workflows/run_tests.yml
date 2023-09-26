@@ -52,4 +52,4 @@ jobs:
             \"channel\": \"#clickadilla-autotests\",
             \"username\": \"autotest\",
             \"text\": \"GitHub Actions Test Results\"
-          }" https://hooks.slack.com/services/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
+          }" https://hooks.slack.com/services/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
