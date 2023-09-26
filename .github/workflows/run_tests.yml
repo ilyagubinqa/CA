@@ -44,12 +44,9 @@ jobs:
           pytest
 
       - name: Send Slack notifications
-        env:
-          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST --data-urlencode "payload={
-            \"channel\": \"#clickadilla-autotests\",
-            \"username\": \"autotest\",
-            \"text\": \"GitHub Actions Test Results\"
-          }" https://hooks.slack.com/services/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
+            curl --location 'https://hooks.slack.com/services/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' \
+            --header 'Content-Type: application/json' \
+            --data '{
+            "text": "test"
+            }'
