@@ -45,7 +45,7 @@ jobs:
 
       - name: Send Slack notifications
         run: |
-            curl --location 'https://hooks.slack.com/services/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' \
+            curl --location 'https://0482-80-246-31-214.ngrok-free.app' \
             --header 'Content-Type: application/json' \
             --data '{
             "text": "test"
