@@ -15,14 +15,14 @@ def browser():
 
 def test_login(browser):
     # Открытие браузера и переход на страницу регистрации
-    browser.get('https://app.clickadilla.com/login')
+    browser.get('https://app.staging1.clickadilla.com/login')
 
     # Ожидание появления полей и ввод данных для авторизации
     wait = WebDriverWait(browser, 55)
     login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-    login_input.send_keys('iliya.gubin@onlinesup.com')
+    login_input.send_keys('ilyagubin1234567@gmail.com')
     password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-    password_input.send_keys('CG7NvXT4XdKB5zf')
+    password_input.send_keys('ilyagubin1234567@gmail.com')
     send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
     send_button.click()
 
@@ -46,7 +46,7 @@ def test_login(browser):
     time.sleep(15)
 
     # Проверяем, что произошел вход в личный кабинет
-    expected_url = 'https://app.clickadilla.com/dashboard'
+    expected_url = 'https://app.staging1.clickadilla.com/dashboard'
     print(expected_url)
     current_url = browser.current_url
 
