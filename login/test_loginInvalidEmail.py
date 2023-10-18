@@ -9,9 +9,8 @@ import pytest
 @pytest.fixture()
 def browser():
     options = Options()
-
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(13)
+    chrome_browser.implicitly_wait(15)
     return chrome_browser
 
 def test_invalidemail(browser):
@@ -31,7 +30,7 @@ def test_invalidemail(browser):
 
     # Вывод сообщения об ошибке
     time.sleep(5)
-    error_element = browser.find_element(By.XPATH, "/html/body/div[1]/div/main/div/div/div/div[1]/div/form/div[1]/div[2]/div/div[2]/div/div/div")
+    error_element = browser.find_element(By.CSS_SELECTOR, ".v-messages__message")
     error_message = error_element.text
 
     expected_error_message = "These credentials do not match our records."
@@ -40,4 +39,4 @@ def test_invalidemail(browser):
         print("Test passed successfully")
     else:
         print("Test failed")
-    time.sleep(10)
+    time.sleep(30)
