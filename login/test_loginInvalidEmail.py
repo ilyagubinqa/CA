@@ -33,7 +33,6 @@ def test_invalidemail(browser):
     time.sleep(5)
     error_element = browser.find_element(By.CSS_SELECTOR, ".v-messages__message")
     error_message = error_element.text
-    print(error_message)
 
     expected_error_message = "These credentials do not match our records."
 
