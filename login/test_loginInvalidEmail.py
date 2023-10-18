@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def browser():
     options = Options()
-    options.add_argument('--headless')
+
     chrome_browser = webdriver.Chrome(options=options)
     chrome_browser.implicitly_wait(13)
     return chrome_browser
@@ -31,7 +31,7 @@ def test_invalidemail(browser):
 
     # Вывод сообщения об ошибке
     time.sleep(5)
-    error_element = browser.find_element(By.CSS_SELECTOR, "#app > div > main > div > div > div > div.border-secondary.rounded-xl.py-4.py-sm-7.px-4.px-sm-16.v-sheet.theme--light > div > form > div:nth-child(1) > div.v-input.v-input--has-state.v-input--is-label-active.v-input--is-dirty.v-input--dense.theme--light.v-text-field.v-text-field--is-booted.v-text-field--enclosed.v-text-field--outlined.error--text > div > div.v-text-field__details > div > div")
+    error_element = browser.find_element(By.XPATH, "/html/body/div[1]/div/main/div/div/div/div[1]/div/form/div[1]/div[2]/div/div[2]/div/div/div")
     error_message = error_element.text
 
     expected_error_message = "These credentials do not match our records."
