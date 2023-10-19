@@ -29,13 +29,13 @@ def test_logininvalidemail(browser):
     send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
     send_button.click()
 
-    # Найти элемент с классом "v-text-field__details"
-    details_element = browser.find_element(By.CLASS_NAME, "v-text-field__details")
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__wrapper")
 
-    # Получить текстовое содержание элемента
+    # Текст элемента
     details_text = details_element.text
 
-    # Проверить, содержит ли текст указанную вами ошибку
+    # Проверка на то, что ошибка содержит текст
     error_message = "These credentials do not match our records."
 
     if error_message in details_text:
