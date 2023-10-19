@@ -30,7 +30,7 @@ def test_invalidemail(browser):
     send_button.click()
 
     # Вывод сообщения об ошибке
-    time.sleep(5)
+    time.sleep(15)
     error_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
     error_message = error_element.text
 
