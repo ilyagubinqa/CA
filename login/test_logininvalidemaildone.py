@@ -30,7 +30,7 @@ def test_invalicredentials(browser):
     send_button.click()
 
     # Вывод сообщения об ошибке
-    time.sleep(15)
+    wait = WebDriverWait(browser, 10)
     error_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
     error_message = error_element.text
 
