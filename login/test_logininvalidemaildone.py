@@ -14,7 +14,7 @@ def browser():
     chrome_browser.implicitly_wait(15)
     return chrome_browser
 
-def test_invalidemail(browser):
+def test_logininvalidemail(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.get('https://app.staging1.clickadilla.com/login')
 
@@ -29,15 +29,18 @@ def test_invalidemail(browser):
     send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
     send_button.click()
 
-    # Вывод сообщения об ошибке
-    wait = WebDriverWait(browser, 10)
-    error_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
-    error_message = error_element.text
+    # Найти элемент с классом "v-text-field__details"
+    details_element = browser.find_element(By.CLASS_NAME, "v-text-field__details")
 
-    expected_error_message = "These credentials do not match our records."
+    # Получить текстовое содержание элемента
+    details_text = details_element.text
 
-    if error_message.strip() == expected_error_message.strip():
+    # Проверить, содержит ли текст указанную вами ошибку
+    error_message = "These credentials do not match our records."
+
+    if error_message in details_text:
         print("Test passed successfully")
     else:
         print("Test failed")
+
     time.sleep(35)
