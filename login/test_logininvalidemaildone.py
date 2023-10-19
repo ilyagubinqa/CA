@@ -14,7 +14,7 @@ def browser():
     chrome_browser.implicitly_wait(15)
     return chrome_browser
 
-def test_invalicredentials(browser):
+def test_invalidemail(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.get('https://app.staging1.clickadilla.com/login')
 
