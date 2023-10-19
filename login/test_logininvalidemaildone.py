@@ -9,9 +9,8 @@ import pytest
 @pytest.fixture()
 def browser():
     options = Options()
-    options.add_argument('--headless')
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(15)
+    chrome_browser.implicitly_wait(35)
     return chrome_browser
 
 def test_logininvalidemail(browser):
@@ -30,7 +29,7 @@ def test_logininvalidemail(browser):
     send_button.click()
 
     # Поиск ошибки
-    details_element = browser.find_element(By.CLASS_NAME, "v-messages__wrapper")
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
 
     # Текст элемента
     details_text = details_element.text
