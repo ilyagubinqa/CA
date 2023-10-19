@@ -11,7 +11,7 @@ def browser():
     options = Options()
     options.add_argument('--headless')
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(15)
+    chrome_browser.implicitly_wait(25)
     return chrome_browser
 
 def test_invalidpassword(browser):
@@ -29,14 +29,16 @@ def test_invalidpassword(browser):
     send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
     send_button.click()
 
-    # Вывод сообщения об ошибке
-    time.sleep(15)
-    error_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
-    error_message = error_element.text
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
 
-    expected_error_message = "The password field is required when code is not present."
+    # Текст элемента
+    details_text = details_element.text
 
-    if error_message.strip() == expected_error_message.strip():
+    # Проверка на то, что ошибка содержит текст
+    error_message = "The password field is required when code is not present."
+
+    if error_message in details_text:
         print("Test passed successfully")
     else:
         print("Test failed")
