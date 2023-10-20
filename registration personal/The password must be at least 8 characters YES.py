@@ -19,7 +19,7 @@ def test_registration(browser):
     browser.get('https://app.staging1.clickadilla.com/register')
 
     # Ожидание появления полей ввода
-    wait = WebDriverWait(driver, 15)
+    wait = WebDriverWait(browser, 15)
     name_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-register-name-field")))
     email_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-register-email-field")))
     password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-register-password-field")))
