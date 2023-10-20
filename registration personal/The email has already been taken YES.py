@@ -50,4 +50,4 @@ def test_registration(browser):
         print("Test passed successfully")
     else:
         print("Test failed")
-    time.sleep(35)
+    time.sleep(36)
