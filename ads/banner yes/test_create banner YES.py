@@ -47,7 +47,7 @@ def test_registration(browser):
     size.click()
     url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div/div[2]/div/div/div[2]/div/div[5]/div[2]/div/div/div/div/div[1]/div[1]/div[2]/div/div[1]/div')))
     url.click()
-
+    url.send_keys('clickadilla.com')
     time.sleep(3)
 
     # Загрузка файла для креатива
