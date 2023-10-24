@@ -20,7 +20,6 @@ def test_banner(browser):
     browser.maximize_window()
     browser.get('https://app.staging1.clickadilla.com/login')
 
-
     # Ожидание появления полей и ввод данных для авторизации
     wait = WebDriverWait(browser, 55)
     login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
