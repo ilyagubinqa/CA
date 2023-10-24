@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import time
 import pytest
+import pyautogui
 
 @pytest.fixture()
 def browser():
@@ -14,20 +15,19 @@ def browser():
     chrome_browser.implicitly_wait(25)
     return chrome_browser
 
-def test_invalidpassword(browser):
-    # Открытие браузера и переход на страницу регистрации
+def test_registration(browser):
+    # Открытие браузера и переход на страницу авторизации
     browser.get('https://app.staging1.clickadilla.com/login')
 
-    # Ожидание появления полей и ввод данных для авторизации
-    wait = WebDriverWait(browser, 55)
-    login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-    login_input.send_keys('ilyagubin1234567@gmail.comm')
-    login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-    login_input.send_keys('secret')
-
-    # Отправка данных для авторизации и вход в личный кабинет
-    send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
-    send_button.click()
+    # невалидный email
+    wait = WebDriverWait(browser, 30)
+    restore_password = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[1]/div/div[2]')))
+    restore_password.click()
+    login_input = wait.until(EC.element_to_be_clickable((By.ID, 'selenium-test-login-forgot-password-field')))
+    login_input.click()
+    pyautogui.typewrite('2134')
+    send = wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="app"]/div[3]/div/div/div[3]/div[2]/button/span/span')))
+    send.click()
 
     # Поиск ошибки
     details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
@@ -36,7 +36,7 @@ def test_invalidpassword(browser):
     details_text = details_element.text
 
     # Проверка на то, что ошибка содержит текст
-    error_message = "These credentials do not match our records."
+    error_message = "The email must be a valid email address."
 
     if error_message in details_text:
         print("Test passed successfully")
