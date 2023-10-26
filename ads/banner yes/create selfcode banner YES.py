@@ -1,11 +1,12 @@
 from selenium import webdriver
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import time
 import pytest
-import pyautogui
+
 
 @pytest.fixture()
 def browser():
@@ -48,8 +49,8 @@ def test_banner(browser):
     size = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='160x600']")))
     size.click()
     selfcode_text = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div[2]/div/div[1]/div')))
-    selfcode_text.click()
-    pyautogui.typewrite('test')
+    ActionChains(browser).click(selfcode_text).perform()
+    ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
     time.sleep(2)
 
     # Отправка запроса на создание баннера
