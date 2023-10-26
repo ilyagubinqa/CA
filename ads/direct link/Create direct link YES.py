@@ -1,21 +1,21 @@
 from selenium import webdriver
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import time
 import pytest
-import pyautogui
 
 @pytest.fixture()
 def browser():
     options = Options()
-
+    options.add_argument('--headless')
     chrome_browser = webdriver.Chrome(options=options)
     chrome_browser.implicitly_wait(25)
     return chrome_browser
 
-def test_registration(browser):
+def test_directlink(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.maximize_window()
     browser.get('https://app.staging1.clickadilla.com/login')
@@ -41,12 +41,13 @@ def test_registration(browser):
     create_ads.click()
 
     # Заполнение полей для создания креатива
-    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[2]/div[2]/div/div[1]/div')))
-    title.click()
-    pyautogui.typewrite('test')
-    url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]/div/div[1]/div')))
-    url.click()
-    pyautogui.typewrite('https://app.clickadilla.com')
+    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div/div[2]/div/div/div[2]/div/div[2]/div[2]/div/div[1]/div')))
+    ActionChains(browser).click(title).perform()
+    ActionChains(browser).send_keys('test').perform()
+    url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]/div/div[1]/div')))
+    ActionChains(browser).click(url).perform()
+    ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
+    time.sleep(3)
 
     # Отправка запроса на создание direct link
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
