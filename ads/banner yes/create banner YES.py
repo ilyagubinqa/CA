@@ -15,7 +15,7 @@ def browser():
     chrome_browser.implicitly_wait(25)
     return chrome_browser
 
-def test_registration(browser):
+def test_banner(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.maximize_window()
     browser.get('https://app.staging1.clickadilla.com/login')
