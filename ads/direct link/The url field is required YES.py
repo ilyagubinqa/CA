@@ -35,16 +35,16 @@ def test_directlink(browser):
     element.click()
 
     # Выбор direct link
-    create_direct = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[2]/div[1]/div/div[2]/div/div[8]')))
+    create_direct = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div[8]')))
     create_direct.click()
-    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//*[@id='app']/div/main/div/div/div/div[1]/a/span/span")))
+    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/main/div/div[2]/div/div[1]/a/span/span")))
     create_ads.click()
     time.sleep(3)
 
     # Заполнение полей для создания креатива
-    url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]/div/div[1]/div')))
-    ActionChains(browser).click(url).perform()
-    ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
+    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[2]/div[2]/div/div[1]/div')))
+    ActionChains(browser).click(title).perform()
+    ActionChains(browser).send_keys('test').perform()
 
     # Отправка запроса на создание direct link
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
@@ -60,7 +60,7 @@ def test_directlink(browser):
     details_text = details_element.text
 
     # Проверка на то, что ошибка содержит текст
-    error_message = "The title field is required."
+    error_message = "The url field is required."
 
     if error_message in details_text:
         print("Test passed successfully")
