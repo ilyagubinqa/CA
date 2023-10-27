@@ -39,9 +39,4 @@ def test_domain(browser):
 
     response = requests.post(slack_webhook_url, json=data)
 
-    if response.status_code == 200:
-        print('Slack notification sent successfully')
-    else:
-        print('Failed to send Slack notification')
-
     time.sleep(5)
