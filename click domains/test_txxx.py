@@ -28,9 +28,9 @@ def test_domain(browser):
     status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
     status = status_element.text
     if status == "Total visit":
-        result=("Test passed successfully")
+        result="Test passed successfully"
     else:
-        result=("Test failed")
+        result="Test failed"
 
     # Вывести результат в консоль
     print(result)
@@ -40,6 +40,6 @@ def test_domain(browser):
         'text': f'Test Result: {result}'
     }
 
-    response = requests.post(slack_webhook_url, json=data)
+    requests.post(slack_webhook_url, json=data)
 
     time.sleep(5)
