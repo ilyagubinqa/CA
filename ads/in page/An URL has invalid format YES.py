@@ -43,14 +43,14 @@ def test_banner(browser):
 
     # Заполнение полей для создания креатива
     url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[1]/div[2]/div/div[1]/div')))
-    url.click()
-    pyautogui.typewrite('https://app.clickadilla.com')
+    ActionChains(browser).click(url).perform()
+    ActionChains(browser).send_keys('q').perform()
     title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[3]/div[2]/div/div[1]/div')))
-    title.click()
-    pyautogui.typewrite('test')
+    ActionChains(browser).click(title).perform()
+    ActionChains(browser).send_keys('test').perform()
     description = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[5]/div[2]/div/div[1]/div')))
-    description.click()
-    pyautogui.typewrite('test')
+    ActionChains(browser).click(description).perform()
+    ActionChains(browser).send_keys('test').perform()
     time.sleep(3)
 
     # Загрузка файла для креатива
@@ -64,14 +64,20 @@ def test_banner(browser):
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
     send_button.click()
 
-    # Вывод сообщения о создании креатива
-    time.sleep(3)
-    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[3]/div/div/div[3]/div/div/div[1]/button/span')))
-    status = status_element.text
+    # Вывод сообщения об ошибке
+    time.sleep(2)
 
-    if status == "Start Another Campaign":
-        print("Your Ad Campaign created successfully")
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
+
+    # Текст элемента
+    details_text = details_element.text
+
+    # Проверка на то, что ошибка содержит текст
+    error_message = "An URL has invalid format."
+
+    if error_message in details_text:
+        print("Test passed successfully")
     else:
-        print("Failed to created Ad Campaign")
-
-    sleep(50)
+        print("Test failed")
+    time.sleep(30)
