@@ -32,6 +32,9 @@ def test_domain(browser):
     else:
         result = "Test failed"
 
+    # Вывести результат в консоль
+    print(result)
+
     # Отправка сообщения в Slack
     data = {
         'text': f'Test Result: {result}'
