@@ -39,4 +39,4 @@ def test_domain(browser):
 
     response = requests.post(slack_webhook_url, json=data)
 
-    time.sleep(6)
+    time.sleep(5)
