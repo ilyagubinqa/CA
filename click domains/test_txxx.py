@@ -13,7 +13,7 @@ slack_webhook_url = 'https://hooks.slack.com/services/T0E52C0NT/B05U13WV2E4/4tL2
 @pytest.fixture()
 def browser():
     options = Options()
-
+    options.add_argument('--headless')
     chrome_browser = webdriver.Chrome(options=options)
     chrome_browser.implicitly_wait(6)
     return chrome_browser
