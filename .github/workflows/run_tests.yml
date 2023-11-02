@@ -49,36 +49,23 @@ jobs:
           pytest
           status=$?
           if [ $status -eq 0 ]; then
-            echo "Test passed successfully"
-            curl -X POST -H 'Content-type: application/json' --data '
-            {
-              "text": "Automated tests result: success\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Automated tests result: success\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6"
-                  }
-                }
-              ]
-            }' $SLACK_WEBHOOK_URL
+            message="Test passed successfully"
           else
-            echo "Test failed"
-            curl -X POST -H 'Content-type: application/json' --data '
-            {
-              "text": "Automated tests result: failure\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Automated tests result: failure\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6"
-                  }
-                }
-              ]
-            }' $SLACK_WEBHOOK_URL
+            message="Test failed"
           fi
+          curl -X POST -H 'Content-type: application/json' --data "
+          {
+            \"text\": \"$message\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"$message\"
+                }
+              }
+            ]
+          }" $SLACK_WEBHOOK_URL
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
