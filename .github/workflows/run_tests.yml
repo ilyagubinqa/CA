@@ -47,6 +47,8 @@ jobs:
       - name: Run tests and Send Slack notifications
         run: |
           test_output=$(pytest)
+          echo "$test_output"  # Вывод содержимого переменной test_output
+      
           if echo "$test_output" | grep -q 'Total visits'; then
             message="Test passed successfully"
           else
@@ -61,7 +63,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"$message\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
+                  \"text\": \"$message\n$test_output\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
                 }
               }
             ]
