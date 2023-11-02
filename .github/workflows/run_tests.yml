@@ -61,7 +61,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"$message\"
+                  \"text\": \"$message\nAutomated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
                 }
               }
             ]
