@@ -46,9 +46,9 @@ jobs:
 
       - name: Run tests and Send Slack notifications
         run: |
-          status=$(pytest)  # Предполагается, что pytest возвращает результат теста в виде строки
+          test_result=$(pytest)  
 
-          if echo "$status" | grep -q "Total visits"; then
+          if echo "$test_result" | grep -q 'Total visits'; then
             message="Test passed successfully"
           else
             message="Test failed"
@@ -62,7 +62,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"$message\nAutomated tests result: $status\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
+                  \"text\": \"$message\nAutomated tests result: $test_result\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
                 }
               }
             ]
