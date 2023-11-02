@@ -47,7 +47,7 @@ jobs:
       - name: Send Slack notification
         run: |
           status=$(cat test_output.txt)
-          if grep -q 'Test passed successfully' test_output.txt; then
+          if grep -q 'Total visits' test_output.txt; then
             message="Test passed successfully"
           else
             message="Test failed"
