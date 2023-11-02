@@ -44,24 +44,29 @@ jobs:
         run:
           pytest
 
-      - name: Send Slack notifications
-        id: slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": "Automated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Automated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                  }
+      - name: Run tests and Send Slack notifications
+        run: |
+          test_result=$(pytest)  # Запускаем тесты, результат сохраняем в переменную
+
+          if echo "$test_result" | grep -q 'Test passed successfully'; then
+            status="Test passed successfully"
+          else
+            status="Test failed"
+          fi
+
+          curl -X POST -H 'Content-type: application/json' --data "
+          {
+            \"text\": \"$status\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"$status\n$test_result\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
                 }
-              ]
-            }
+              }
+            ]
+          }" $SLACK_WEBHOOK_URL
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
