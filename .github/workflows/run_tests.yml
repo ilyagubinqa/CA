@@ -55,10 +55,6 @@ jobs:
             message="Test failed"
           fi
       
-          if echo "$test_output" | grep -q 'Test passed successfully'; then
-            message="Test passed successfully"
-          fi
-      
           curl -X POST -H 'Content-type: application/json' --data "
           {
             \"text\": \"$message\",
