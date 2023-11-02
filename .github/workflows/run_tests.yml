@@ -46,13 +46,18 @@ jobs:
 
       - name: Run tests and Send Slack notifications
         run: |
-          test_output=$(pytest)
+          test_output=$(pytest --tb=no)
           echo "$test_output"  # Вывод содержимого переменной test_output
-      
-          if echo "$test_output" | grep -q '1 passed'; then
-            message="Test passed successfully"
+          
+          # Проверка на наличие определенной строки в выводе тестов
+          if echo "$test_output" | grep -q 'Connection refused'; then
+            message="Test failed: Site is not reachable"  # Или любое другое сообщение об ошибке
           else
-            message="Test failed"
+            if echo "$test_output" | grep -q '1 passed'; then
+              message="Test passed successfully"
+            else
+              message="Test failed"
+            fi
           fi
       
           curl -X POST -H 'Content-type: application/json' --data "
