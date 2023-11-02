@@ -44,24 +44,41 @@ jobs:
         run:
           pytest
 
-      - name: Send Slack notifications
-        id: slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
+      - name: Run tests and Send Slack notifications
+        run: |
+          pytest
+          status=$?
+          if [ $status -eq 0 ]; then
+            echo "Test passed successfully"
+            curl -X POST -H 'Content-type: application/json' --data '
             {
-              "text": "Automated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "text": "Automated tests result: success\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Automated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    "text": "Automated tests result: success\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6"
                   }
                 }
               ]
-            }
+            }' $SLACK_WEBHOOK_URL
+          else
+            echo "Test failed"
+            curl -X POST -H 'Content-type: application/json' --data '
+            {
+              "text": "Automated tests result: failure\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Automated tests result: failure\nhttps://github.com/ilyagubinqa/CA/commit/99ac3ea2b907f599737046bbdfb2454ca262f9a6"
+                  }
+                }
+              ]
+            }' $SLACK_WEBHOOK_URL
+          fi
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
