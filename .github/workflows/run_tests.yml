@@ -47,7 +47,7 @@ jobs:
       - name: Run tests and Send Slack notifications
         run: |
           test_result=$(pytest |& tee /dev/tty | grep -c 'Total visits' || true)
-          if [[ $test_result -gt 0 ]]; then
+          if [[ $test_result -gt 1 ]]; then
             message="Test passed successfully"
           else
             message="Test failed"
