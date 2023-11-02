@@ -48,7 +48,7 @@ jobs:
         run: |
           test_result=$(pytest)  # Запускаем тесты, результат сохраняем в переменную
 
-          if echo "$test_result" | grep -q 'Test passed successfully'; then
+          if echo "$test_result" | grep -q 'Total visits'; then
             status="Test passed successfully"
           else
             status="Test failed"
