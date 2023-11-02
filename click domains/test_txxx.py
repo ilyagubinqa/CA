@@ -20,7 +20,7 @@ def browser():
 def test_domain(browser):
     # Открытие браузера и переход на страницу премиум сайта
     browser.maximize_window()
-    browser.get('https://click.tx143xx.com')
+    browser.get('https://click.txxx.com')
 
     # Проверка на отображение блока с текстом
     time.sleep(5)
@@ -28,8 +28,8 @@ def test_domain(browser):
     status = status_element.text
     print(status)
     if status == "Total visits":
-        print("Test passed successfully")
+        assert True
     else:
-        print("Test failed")
+        assert False
 
     time.sleep(5)
