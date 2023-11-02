@@ -42,27 +42,25 @@ jobs:
 
       - name: Run tests
         run:
-          pytest
+          pytest > test_output.txt
 
-      - name: Run tests and Send Slack notifications
+      - name: Send Slack notification
         run: |
-          test_result=$(pytest)  # Запускаем тесты, результат сохраняем в переменную
-
-          if echo "$test_result" | grep -q 'Total visits'; then
-            status="Test passed successfully"
+          status=$(cat test_output.txt)
+          if grep -q 'Test passed successfully' test_output.txt; then
+            message="Test passed successfully"
           else
-            status="Test failed"
+            message="Test failed"
           fi
-
           curl -X POST -H 'Content-type: application/json' --data "
           {
-            \"text\": \"$status\",
+            \"text\": \"$message\",
             \"blocks\": [
               {
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"$status\n$test_result\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
+                  \"text\": \"$message\n$status\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
                 }
               }
             ]
