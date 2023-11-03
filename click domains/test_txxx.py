@@ -27,9 +27,10 @@ def test_domain(browser):
     status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[1]/div/h1')))
     status = status_element.text
     print(status)
-    if status == "Start advertising on Txxx.com tofday":
+    if status == "Start advertising on Txxx.com today":
         print("Test passed successfully")
     else:
         print("Test failed")
 
     time.sleep(5)
+    browser.quit()
