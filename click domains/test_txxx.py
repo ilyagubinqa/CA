@@ -33,4 +33,3 @@ def test_domain(browser):
         print("Test failed")
 
     time.sleep(5)
-    browser.quit()

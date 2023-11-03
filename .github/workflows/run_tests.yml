@@ -21,6 +21,7 @@ jobs:
           pip install pytest
           pip install selenium
           pip install requests
+          pip install -r requirements.txt
 
       - name: Install Chrome
         run: |
@@ -51,7 +52,7 @@ jobs:
           echo "$test_output"
           
           # Check the output for 'Total visits' and set the test result accordingly
-          if echo "$test_output" | grep -q '[Test failed]'; then
+          if echo "$test_output" | grep -q '[Start advertising on Txxx.com today]'; then
             test_result="Test passed successfully"
           else
             test_result="Test failed"
