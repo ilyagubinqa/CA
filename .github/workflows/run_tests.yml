@@ -51,7 +51,7 @@ jobs:
           echo "$test_output"
           
           # Check the output for 'Total visits' and set the test result accordingly
-          if echo "$test_output" | grep -q 'test session start'; then
+          if echo "$test_output" | grep -q 'test session startsss'; then
             test_result="Test passed successfully"
           else
             test_result="Test failed"
