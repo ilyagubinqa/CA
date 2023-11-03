@@ -26,7 +26,7 @@ def test_domain(browser):
     time.sleep(5)
     details_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[1]/div/h1')))
     details_text = details_element.text
-    error_message = "Start advertising on Txxx.com today"
+    error_message = "Start advertising on Txxx.com todfay"
 
     if error_message in details_text:
         print("Test passed successfully")
