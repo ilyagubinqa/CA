@@ -51,12 +51,12 @@ jobs:
           echo "$test_output"
           
           # Check the output for 'Start advertising on Txxx.com today' and set the test result accordingly
-          if echo "$test_output" | grep -q 'Start advertising on Txxx.com today'; then
+          if [[ $test_output == *"Start advertising on Txxx.com today"* ]]; then
             test_result="Test passed successfully"
           else
             test_result="Test failed"
           fi
-      
+              
           echo "Sending test results to Slack"
       
           # Format the payload with the test result and URL
