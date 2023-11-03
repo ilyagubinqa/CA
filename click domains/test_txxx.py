@@ -28,7 +28,7 @@ def test_domain(browser):
     status = status_element.text
     print(status)
     try:
-        assert status == "Total visits"
+        assert status == "Total visit"
         print("Test passed successfully")
     except AssertionError:
         print("Test failed")
