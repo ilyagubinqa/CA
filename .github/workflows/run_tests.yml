@@ -44,11 +44,18 @@ jobs:
         run:
           pytest
 
-      - name: Send custom JSON data to Slack workflow
-        id: slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          # For posting a rich message using Block Kit
+      - name: Run automated tests
+        run: |
+          
+          pytest_output=$(pytest)
+          echo "$pytest_output"
+          
+          # Проверьте вывод на наличие 'Total visits' и соответствующим образом установите статус теста
+          if echo "$pytest_output" | grep -q 'Total visits'; then
+            test_result="Test passed successfully"
+          else
+            test_result="Test failed"
+          fi
           payload: |
             {
               "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
