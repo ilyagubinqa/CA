@@ -24,12 +24,14 @@ def test_domain(browser):
 
     # Проверка на отображение блока с текстом
     time.sleep(5)
-    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[1]/div/h1')))
-    status = status_element.text
-    print(status)
-    if status == "Start advertising on Txxx.com today":
+    details_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[1]/div/h1')))
+    details_text = details_element.text
+    error_message = "Start advertising on Txxx.com today"
+
+    if error_message in details_text:
         print("Test passed successfully")
     else:
         print("Test failed")
+
 
     time.sleep(5)
