@@ -17,7 +17,7 @@ def browser():
     chrome_browser.implicitly_wait(6)
     return chrome_browser
 
-def test_txxx(browser):
+def test_domain(browser):
     # Открытие браузера и переход на страницу премиум сайта
     browser.maximize_window()
     browser.get('https://click.txxx.com')
