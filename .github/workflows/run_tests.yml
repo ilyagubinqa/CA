@@ -44,30 +44,24 @@ jobs:
         run:
           pytest
 
-      - name: Run tests and Send Slack notifications
-        run: |
-          test_output=$(pytest)
-          echo "$test_output" 
-      
-          if echo "$test_output" | grep -q '1 passed'; then
-            message="Test passed successfully"
-          else
-            message="Test failed"
-          fi
-      
-          curl -X POST -H 'Content-type: application/json' --data "
-          {
-            \"text\": \"$message\",
-            \"blocks\": [
-              {
-                \"type\": \"section\",
-                \"text\": {
-                  \"type\": \"mrkdwn\",
-                  \"text\": \"$message\n$test_output\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
                 }
-              }
-            ]
-          }" $SLACK_WEBHOOK_URL
+              ]
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
