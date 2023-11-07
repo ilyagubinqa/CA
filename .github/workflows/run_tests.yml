@@ -43,7 +43,7 @@ jobs:
       - name: Run automated tests
         run: |
           # Run the tests
-          python your_test_script.py
+          python test_txxx.py
       
           # Export the test status as an environment variable
           echo "TEST_STATUS=${TEST_STATUS}" >> $GITHUB_ENV
