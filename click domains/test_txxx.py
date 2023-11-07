@@ -27,11 +27,10 @@ def test_domain(browser):
     time.sleep(5)
 
     # Your existing test code
-    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located(
-        (By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
+    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
     status = status_element.text
     print(status)
-    if status == "Total visitssss":
+    if status == "12Total visits":
         print("Test passed successfully")
         os.environ["TEST_STATUS"] = "Test passed successfully"
     else:
