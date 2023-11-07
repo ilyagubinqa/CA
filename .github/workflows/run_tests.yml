@@ -38,7 +38,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest | tee test_txxx.txt
+          pytest > test_txxx.txt
           if grep -q "Total visits" test_txxx.txt; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
