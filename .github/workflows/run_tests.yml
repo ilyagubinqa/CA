@@ -40,28 +40,29 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests
-        run:
-          pytest
+      - name: Run automated tests
+        run: |
+          # Run the tests
+          python your_test_script.py
+      
+          # Export the test status as an environment variable
+          echo "TEST_STATUS=${TEST_STATUS}" >> $GITHUB_ENV
 
-      - name: Send Slack notifications
-        id: slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": " \"$test_result\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"$test_result\n$test_output\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"}}]}" > slack_payload.json",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Automated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                  }
+      - name: Send test results to Slack
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "
+          {
+            \"text\": \"$TEST_STATUS\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"
                 }
-              ]
-            }
+              }
+            ]
+          }" $SLACK_WEBHOOK_URL
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
