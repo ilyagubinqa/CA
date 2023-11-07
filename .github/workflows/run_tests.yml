@@ -44,30 +44,24 @@ jobs:
         run:
           pytest
 
-      - name: Run automated tests
-        run: |
-          # Run the tests and save the output
-          test_output=$(pytest)
-          echo "$test_output"
-          
-          # Check the output for 'Total visits' and set the test result accordingly
-          if echo "$test_output" | grep -q '[Total visitsss]'; then
-            test_result="Test passed successfully"
-          else
-            test_result="Test failed"
-          fi
-      
-          echo "Sending test results to Slack"
-      
-          # Format the payload with the test result and URL
-          echo "{\"text\": \"$test_result\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"$test_result\n$test_output\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\"}}]}" > slack_payload.json
-
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      - name: Send test results to Slack
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data @slack_payload.json $SLACK_WEBHOOK_URL
+      - name: Send Slack notifications
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "Automated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Automated tests result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
