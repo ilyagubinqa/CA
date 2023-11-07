@@ -27,10 +27,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install google-chrome-stable
 
-      - name: Install pyautogui
-        run: |
-          pip install pyautogui
-
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
 
@@ -43,6 +39,7 @@ jobs:
       - name: Run tests
         run:
           pytest
+          echo "TEST_STATUS=${TEST_STATUS}" >> $GITHUB_ENV
 
       - name: Send test results to Slack
         run: |
