@@ -38,8 +38,8 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest > test_txxx
-          status=$(cat test_txxx | grep -oP "(?<=Status: ).*")
+          pytest > test_txxx.txt
+          status=$(cat test_txxx.txt | grep -oP "(?<=Status: ).*")
           if [ "$status" = "Total visits" ]; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
