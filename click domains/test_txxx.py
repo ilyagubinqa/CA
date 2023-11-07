@@ -31,7 +31,7 @@ def test_domain(browser):
         (By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
     status = status_element.text
     print(status)
-    if status == "Total visits":
+    if status == "Total visitssss":
         print("Test passed successfully")
         os.environ["TEST_STATUS"] = "Test passed successfully"
     else:
