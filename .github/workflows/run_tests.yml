@@ -39,7 +39,8 @@ jobs:
       - name: Run tests
         run: |
           pytest > pytest_output.txt
-          if [ $? -eq 0 ]; then
+          status=$(cat pytest_output.txt | grep -oP "(?<=Status: ).*")
+          if [ "$status" = "Total visits" ]; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
