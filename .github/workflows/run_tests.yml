@@ -37,9 +37,13 @@ jobs:
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
       - name: Run tests
-        run:
-          pytest
-          echo "TEST_STATUS=${TEST_STATUS}" >> $GITHUB_ENV
+        run: |
+          pytest > pytest_output.txt
+          if [ $? -eq 0 ]; then
+            echo "TEST_STATUS=Test passed" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
+          fi
 
       - name: Send test results to Slack
         run: |
