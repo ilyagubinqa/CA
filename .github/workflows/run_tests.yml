@@ -40,13 +40,9 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run automated tests
-        run: |
-          # Run the tests
-          python test_txxx.py
-      
-          # Export the test status as an environment variable
-          echo "TEST_STATUS=${TEST_STATUS}" >> $GITHUB_ENV
+      - name: Run tests
+        run:
+          pytest
 
       - name: Send test results to Slack
         run: |
