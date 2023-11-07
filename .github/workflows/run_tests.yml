@@ -40,7 +40,7 @@ jobs:
         run: |
           pytest > pytest_output.txt
           if [ $? -eq 0 ]; then
-            echo "TEST_STATUS=Test passed" >> $GITHUB_ENV
+            echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
           fi
