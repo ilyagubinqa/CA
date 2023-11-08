@@ -39,7 +39,7 @@ jobs:
       - name: Run tests
         run: |
           pytest > test_txxx.txt
-          if grep -q "Test passed successfully" test_txxx.txt; then
+          if grep -q "1 passed" test_txxx.txt; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
