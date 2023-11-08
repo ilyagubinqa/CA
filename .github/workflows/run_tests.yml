@@ -40,6 +40,9 @@ jobs:
         run: |
           pytest > test_txxx.txt
 
+      - name: Create the test results file
+        run: echo "Test failed" > test_results.txt
+
       - name: Use the test results
         run: |
           test_result=$(<test_results.txt)
