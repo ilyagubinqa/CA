@@ -38,12 +38,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest > test_txxx.txt
-          if grep -q "Total visits" test_txxx.txt; then
-            echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
-          fi
+          pytest
 
       - name: Send test results to Slack
         env:
