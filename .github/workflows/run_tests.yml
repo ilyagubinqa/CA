@@ -37,19 +37,16 @@ jobs:
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
       - name: Run tests
-        run:
-          pytest
-      - name: Run automated tests
         run: |
-          # Run the tests and save the output
-          test_output=$(pytest)
-          echo "$test_output"
-          # Check the output for 'Total visits' and set the test result accordingly
-          if echo "$test_output" | grep -q '[Total visits]'; then
-            test_result="Test passed successfully"
+          pytest > test_txxx.txt
+          if grep -q "Total visits" test_txxx.txt; then
+            echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
-            test_result="Test failed"
+            echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
           fi
+
+      - name: Check file presence
+        run: ls -l test_txxx.txt
 
       - name: Send test results to Slack
         env:
