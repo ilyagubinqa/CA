@@ -37,8 +37,10 @@ jobs:
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
       - name: Run tests
+        run: pytest -vv > test_txxx.txt
+
+      - name: Check test status
         run: |
-          pytest > test_txxx.txt
           if grep -q "1 passed" test_txxx.txt; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
