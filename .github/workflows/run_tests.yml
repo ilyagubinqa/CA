@@ -44,6 +44,10 @@ jobs:
           else
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
           fi
+
+      - name: Check file presence
+        run: ls -l test_txxx.txt
+
       - name: Send test results to Slack
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
