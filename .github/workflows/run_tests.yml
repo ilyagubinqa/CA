@@ -41,7 +41,7 @@ jobs:
 
       - name: Check test status
         run: |
-          if grep -q "Total visits" test_txxx.txt; then
+          if grep -q "Passed" test_txxx.txt; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
