@@ -36,17 +36,21 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Set test status
+      - name: Run tests and save the results
         run: |
-          test_result=$(<test_results.txt)
-          if [ "$test_result" = "Test passed successfully" ]; then
+          pytest > test_txxx.txt
+          test_result=$(cat test_txxx.txt)
+          echo "::set-env name=TEST_RESULT::$test_result"
+
+      - name: Check the test results
+        run: |
+          if echo "$TEST_RESULT" | grep -q 'Total visits'; then
+            echo "Test passed successfully"
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
+            echo "Test failed"
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
           fi
-
-      - name: Show test file contents
-        run: cat test_txxx.txt
 
       - name: Send test results to Slack
         env:
