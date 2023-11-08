@@ -45,8 +45,8 @@ jobs:
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
           fi
 
-      - name: Check file presence
-        run: ls -l test_txxx.txt
+      - name: Show test file contents
+        run: cat test_txxx.txt
 
       - name: Send test results to Slack
         env:
