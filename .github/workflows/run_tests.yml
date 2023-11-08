@@ -36,10 +36,15 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests
+      - name: Run tests and save the results
         run: |
           pytest > test_txxx.txt
-          if grep -q "1 passed" test_txxx.txt; then
+          # Ваш код для выполнения теста и сохранения результатов в файл test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
