@@ -38,10 +38,11 @@ jobs:
 
       - name: Run tests
         run: |
-          if grep -q "Total visits" test_txxx.txt; then
-            python -c 'import os; os.environ["TEST_STATUS"] = "Test passed successfully"'
+          pytest > test_txxx.txt
+          if grep -q "Test passed successfully" test_txxx.txt; then
+            echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
-            python -c 'import os; os.environ["TEST_STATUS"] = "Test failed"'
+            echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
           fi
 
       - name: Send test results to Slack
