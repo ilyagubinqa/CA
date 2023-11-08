@@ -5,10 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import time
 import pytest
-import logging
-
-# Настройка системы логирования
-logging.basicConfig(level=logging.INFO)
+import os
 
 #вебхук Slack
 slack_webhook_url = 'https://hooks.slack.com/services/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'
@@ -32,8 +29,10 @@ def test_domain(browser):
     status = status_element.text
     print(status)
     if status == "Total visits":
-        logging.info("Test passed successfully")
+        print("Test passed successfully")
+        os.environ["TEST_STATUS"] = "Test passed successfully"
     else:
-        logging.info("Test failed")
+        print("Test failed")
+        os.environ["TEST_STATUS"] = "Test failed"
 
     time.sleep(5)
