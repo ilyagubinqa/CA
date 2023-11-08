@@ -36,6 +36,10 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
+      - name: Check file presence
+        run: |
+          ls -l test_results.txt
+
       - name: Set test status
         run: |
           test_result=$(<test_results.txt)
