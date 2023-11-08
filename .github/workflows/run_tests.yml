@@ -39,7 +39,6 @@ jobs:
       - name: Run tests and save the results
         run: |
           pytest > test_txxx.txt
-          python test_txxx.py > test_results.txt
 
       - name: Use the test results
         run: |
