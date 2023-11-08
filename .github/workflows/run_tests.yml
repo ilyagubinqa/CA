@@ -37,8 +37,19 @@ jobs:
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
       - name: Run tests
-        run: |
+        run:
           pytest
+      - name: Run automated tests
+        run: |
+          # Run the tests and save the output
+          test_output=$(pytest)
+          echo "$test_output"
+          # Check the output for 'Total visits' and set the test result accordingly
+          if echo "$test_output" | grep -q '[Total visits]'; then
+            test_result="Test passed successfully"
+          else
+            test_result="Test failed"
+          fi
 
       - name: Send test results to Slack
         env:
