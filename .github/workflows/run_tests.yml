@@ -38,7 +38,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_txxx.txt || echo "Test failed" > test_txxx.txt
+          pytest > test_txxx.txt || echo "Test failed" > C:\PycharmProjects\click domains\test_results.txt
 
       - name: Use the test results
         run: |
