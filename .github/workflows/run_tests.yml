@@ -36,18 +36,14 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests
+      - name: Set test status
         run: |
-          pytest > test_txxx.txt
-          if grep -q "Total visits" test_txxx.txt; then
+          test_result=$(<test_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
             echo "TEST_STATUS=Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Test failed" >> $GITHUB_ENV
           fi
-
-      - name: Check file presence
-        run: ls -l test_txxx.txt
-
       - name: Send test results to Slack
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
