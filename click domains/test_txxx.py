@@ -28,14 +28,14 @@ def test_domain(browser):
         status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
         status = status_element.text
         print(status)
-        result = "Test passed successfully" if status == "Total visits" else "Test failed"
+        result = "Test passed successfully" if status == "Total visitss" else "Test failed"
 
         # Сохранение результата теста
-        with open("test_results.txt", "w") as file:
+        with open("test_txxx_results.txt", "w") as file:
             file.write(result)
     except Exception as e:
         result = "Test failed"
-        with open("test_results.txt", "w") as file:
+        with open("test_txxx_results.txt", "w") as file:
             file.write(result)
         raise e
     time.sleep(5)
