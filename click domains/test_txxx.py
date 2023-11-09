@@ -21,7 +21,7 @@ def browser():
 def test_domain(browser):
     # Открытие браузера и переход на страницу премиум сайта
     browser.maximize_window()
-    browser.get('https://сlick.txxx.com')
+    browser.get('https://click.txxx.com')
 
     # Проверка на отображение блока с текстом
     time.sleep(5)
