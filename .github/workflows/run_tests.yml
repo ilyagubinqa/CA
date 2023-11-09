@@ -38,23 +38,15 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest test_txxx.py > test_txxx.txt || echo "Test failed" > test_txxx_results.txt
-          pytest test_vjav.py > test_vjav.txt || echo "Test failed" > test_vjav_results.txt
+          pytest > test_txxx.txt || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
-          test_result_txxx=$(<test_txxx_results.txt)
-          if [ "$test_result_txxx" = "Test passed successfully" ]; then
-            echo "TEST_STATUS_TXXX=Click domains: Test passed successfully" >> $GITHUB_ENV
+          test_result=$(<test_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains:Test passed successfully" >> $GITHUB_ENV
           else
-            echo "TEST_STATUS_TXXX=Click domains: Test failed" >> $GITHUB_ENV
-          fi
-      
-          test_result_vjav=$(<test_vjav_results.txt)
-          if [ "$test_result_vjav" = "Test passed successfully" ]; then
-            echo "TEST_STATUS_VJAV=Click domains: Test passed successfully" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS_VJAV=Click domains: Test failed" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
           fi
 
       - name: Send test results to Slack
@@ -62,7 +54,4 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         run: |
-          # Подготовка текстового сообщения для Slack с результатами обоих тестов
-          combined_status="${TEST_STATUS_TXXX}\n${TEST_STATUS_VJAV}"
-          # Отправка сообщения в Slack
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$combined_status\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
