@@ -48,9 +48,9 @@ jobs:
             pytest $test_case > test_result.txt || echo "Test failed" > test_result.txt
             test_result=$(<test_result.txt)
             if [ "$test_result" = "Test passed successfully" ]; then
-              TEST_STATUS=Click domains:Test passed successfully
+              TEST_STATUS="Click domains: Test passed successfully"
             else
-              TEST_STATUS=Click domains:Test failed
+              TEST_STATUS="Click domains: Test failed"
             fi
             curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
           done
