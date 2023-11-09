@@ -62,4 +62,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          # Подготовка текстового сообщения для Slack с результатами обоих тестов
+          combined_status="${TEST_STATUS_TXXX}\n${TEST_STATUS_VJAV}"
+          # Отправка сообщения в Slack
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$combined_status\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" }" $SLACK_WEBHOOK_URL
