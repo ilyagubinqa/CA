@@ -40,14 +40,18 @@ jobs:
         run: |
           pytest > test_txxx.txt || echo "Test failed" > test_results.txt
 
-      - name: Use the test results
+      - name: Run tests and send results to Slack
         run: |
-          test_result=$(<test_results.txt)
-          if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains:Test passed successfully" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
-          fi
+          test_cases=(test_txxx test_vjav)
+          for test_case in "${test_cases[@]}"
+          do
+            pytest $test_case > test_result.txt || echo "Test failed" > test_result.txt
+            test_result=$(<test_result.txt)
+            if [ "$test_result" = "Test passed successfully" ]; then
+              TEST_STATUS=Click domains:Test passed successfully
+            else
+              TEST_STATUS=Click domains:Test failed
+            fi
 
       - name: Send test results to Slack
         env:
