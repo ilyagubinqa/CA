@@ -38,12 +38,12 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest test_txxx.py > test_txxx.txt || echo "Test failed" > test_txxx_results.txt
+          pytest > test_txxx.txt || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
-          test_txxx_result=$(<test_txxx_results.txt)
-          if [ "$test_txxx_result" = "Test passed successfully" ]; then
+          test_result=$(<test_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
             echo "TEST_STATUS=Click domains:Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
