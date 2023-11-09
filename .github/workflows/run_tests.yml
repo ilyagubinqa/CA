@@ -54,9 +54,6 @@ jobs:
             fi
       
             echo "Text to be sent: $TEST_STATUS"
-      
-            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\nhttps://github.com/ilyagubinqa/CA/commit/8d27dfdc7cf6141c3c321500d1c516056b0fe8bc\" } } ] }" $SLACK_WEBHOOK_URL
-          done
 
       - name: Send test results to Slack
         env:
