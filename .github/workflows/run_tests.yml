@@ -54,6 +54,7 @@ jobs:
             fi
       
             echo "Text to be sent: $TEST_STATUS"
+          done
 
       - name: Send test results to Slack
         env:
