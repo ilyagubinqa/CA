@@ -42,7 +42,7 @@ jobs:
 
       - name: Run tests and send results to Slack
         run: |
-          test_cases=(test_txxx test_vjav)
+          test_cases=(test_txxx.py test_vjav.py)
           for test_case in "${test_cases[@]}"
           do
             pytest $test_case > test_result.txt || echo "Test failed" > test_result.txt
@@ -53,12 +53,9 @@ jobs:
               TEST_STATUS="Click domains: Test failed"
             fi
       
-            # Отобразить значения для отладки перед выполнением curl
             echo "Text to be sent: $TEST_STATUS"
       
-            # Отправить уведомление в Slack
-            echo "URL: $SLACK_WEBHOOK_URL"
-            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\nhttps://github.com/ilyagubinqa/CA/commit/8d27dfdc7cf6141c3c321500d1c516056b0fe8bc\" } } ] }" $SLACK_WEBHOOK_URL
           done
 
       - name: Send test results to Slack
