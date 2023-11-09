@@ -42,8 +42,8 @@ jobs:
 
       - name: Use the test results
         run: |
-          test_result=$(<test_txxx_results.txt)
-          if [ "$test_result" = "Test passed successfully" ]; then
+          test_txxx_result=$(<test_txxx_results.txt)
+          if [ "$test_txxx_result" = "Test passed successfully" ]; then
             echo "TEST_STATUS=Click domains:Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
