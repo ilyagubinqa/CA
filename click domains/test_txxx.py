@@ -5,9 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import time
 import pytest
-import os
 
-#вебхук Slack
+# вебхук Slack
 slack_webhook_url = 'https://hooks.slack.com/services/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'
 
 @pytest.fixture()
@@ -19,18 +18,24 @@ def browser():
     return chrome_browser
 
 def test_domain(browser):
-    # Открытие браузера и переход на страницу премиум сайта
-    browser.maximize_window()
-    browser.get('https://cclick.txxx.com')
+    try:
+        # Открытие браузера и переход на страницу премиум сайта
+        browser.maximize_window()
+        browser.get('https://click.txxx.com')
 
-    # Проверка на отображение блока с текстом
-    time.sleep(5)
-    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
-    status = status_element.text
-    print(status)
-    result = "Test passed successfully" if status == "Total visitss" else "Test failed"
+        # Проверка на отображение блока с текстом
+        time.sleep(5)
+        status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
+        status = status_element.text
+        print(status)
+        result = "Test passed successfully" if status == "Total visits" else "Test failed"
 
-    # Сохранение результата теста
-    with open("test_results.txt", "w") as file:
-        file.write(result)
-    time.sleep(5)
+        # Сохранение результата теста
+        with open("test_results.txt", "w") as file:
+            file.write(result)
+        time.sleep(5)
+    except Exception as e:
+        result = "Test failed"
+        with open("test_results.txt", "w") as file:
+            file.write(result)
+        raise e
