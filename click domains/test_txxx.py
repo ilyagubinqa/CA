@@ -33,9 +33,9 @@ def test_domain(browser):
         # Сохранение результата теста
         with open("test_results.txt", "w") as file:
             file.write(result)
-        time.sleep(5)
     except Exception as e:
         result = "Test failed"
         with open("test_results.txt", "w") as file:
             file.write(result)
         raise e
+    time.sleep(5)
