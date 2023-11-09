@@ -52,6 +52,14 @@ jobs:
             else
               TEST_STATUS="Click domains: Test failed"
             fi
+      
+            # Отобразить значения для отладки перед выполнением curl
+            echo "Text to be sent: $TEST_STATUS"
+      
+            # Отправить уведомление в Slack
+            echo "URL: $SLACK_WEBHOOK_URL"
+            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          done
 
       - name: Send test results to Slack
         env:
