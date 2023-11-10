@@ -39,7 +39,6 @@ jobs:
       - name: Run tests and save the results
         run: |
           pytest > test_txxx.txt || echo "Test failed" > test_resultstxxx.txt
-          pytest > test_vjav.txt || echo "Test failed" > test_resultsvjav.txt
 
       - name: Use the test results
         run: |
@@ -49,6 +48,10 @@ jobs:
           else
             echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
           fi
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_vjav.txt || echo "Test failed" > test_resultsvjav.txt
 
       - name: Use the test results
         run: |
