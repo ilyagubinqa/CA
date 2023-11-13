@@ -45,21 +45,20 @@ jobs:
         run: |
           test_result_txxx=$(<test_txxx.txt)
           if [ "$test_result_txxx" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains: Test passed successfully" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (txxx): Test passed successfully" >> $GITHUB_ENV
           else
-            echo "TEST_STATUS=Click domains: Test failed" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (txxx): Test failed" >> $GITHUB_ENV
           fi
       
           test_result_pornq=$(<test_pornq.txt)
           if [ "$test_result_pornq" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains: Test passed successfully" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (pornq): Test passed successfully" >> $GITHUB_ENV
           else
-            echo "TEST_STATUS=Click domains: Test failed" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (pornq): Test failed" >> $GITHUB_ENV
           fi
       
           cat test_txxx.txt >> test_results.txt
           cat test_pornq.txt >> test_results.txt
-
       - name: Send test results to Slack
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
