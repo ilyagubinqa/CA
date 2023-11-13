@@ -31,11 +31,11 @@ def test_domain(browser):
         result = "Test passed successfully" if status == "Total visits" else "Test failed"
 
         # Сохранение результата теста
-        with open("test_resultstxxx.txt", "w") as file:
+        with open("test_results.txt", "w") as file:
             file.write(result)
     except Exception as e:
         result = "Test failed"
-        with open("test_resultstxxx.txt", "w") as file:
+        with open("test_results.txt", "w") as file:
             file.write(result)
         raise e
     time.sleep(5)
