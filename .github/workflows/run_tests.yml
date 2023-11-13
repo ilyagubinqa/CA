@@ -38,27 +38,21 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_txxx.txt || echo "Test failed" > test_results.txt
-          pytest > test_pornq.txt || echo "Test failed" > test_results.txt
+          pytest > test_txxx_result.txt || echo "Test failed" > test_txxx_result.txt
+          pytest > test_pornq_result.txt || echo "Test failed" > test_pornq_result.txt
 
-      - name: Use the test results
+      - name: Combine test results
+        run: cat test_txxx_result.txt test_pornq_result.txt > test_results.txt
+
+      - name: Use the combined test results
         run: |
-          test_result_txxx=$(<test_txxx.txt)
-          if [ "$test_result_txxx" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (txxx): Test passed successfully" >> $GITHUB_ENV
+          test_result=$(<test_results.txt)
+          if [ "$test_result" = "Test passed successfullyTest passed successfully" ]; then
+            echo "TEST_STATUS=Click domains:Test passed successfully" >> $GITHUB_ENV
           else
-            echo "TEST_STATUS=Click domains (txxx): Test failed" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
           fi
-      
-          test_result_pornq=$(<test_pornq.txt)
-          if [ "$test_result_pornq" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (pornq): Test passed successfully" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Click domains (pornq): Test failed" >> $GITHUB_ENV
-          fi
-      
-          cat test_txxx.txt >> test_results.txt
-          cat test_pornq.txt >> test_results.txt
+
       - name: Send test results to Slack
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
