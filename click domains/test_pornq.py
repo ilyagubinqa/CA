@@ -21,6 +21,7 @@ def test_domain(browser):
     try:
         # Открытие браузера и переход на страницу премиум сайта
         browser.maximize_window()
+        browser.get('https://click.pornq.com')
 
         # Проверка на отображение блока с текстом
         time.sleep(5)
