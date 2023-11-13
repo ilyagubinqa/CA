@@ -14,7 +14,7 @@ def browser():
     options = Options()
     options.add_argument('--headless')
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(5)
+    chrome_browser.implicitly_wait(6)
     return chrome_browser
 
 def test_domain(browser):
