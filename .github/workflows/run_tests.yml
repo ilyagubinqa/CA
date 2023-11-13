@@ -38,15 +38,12 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_txxx_result.txt || echo "Test failed" > test_txxx_result.txt
-          pytest > test_pornq_result.txt || echo "Test failed" > test_pornq_result.txt
+          pytest > test_txxx.txt || echo "Test failed" > test_results.txt
 
-      - name: Use the combined test results
+      - name: Use the test results
         run: |
-          test_result_txxx=$(<test_txxx_result.txt)
-          test_result_pornq=$(<test_pornq_result.txt)
-      
-          if [ "$test_result_txxx" = "Test passed successfully" ] && [ "$test_result_pornq" = "Test passed successfully" ]; then
+          test_result=$(<test_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
             echo "TEST_STATUS=Click domains:Test passed successfully" >> $GITHUB_ENV
           else
             echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
