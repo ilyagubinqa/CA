@@ -21,7 +21,7 @@ def test_domain(browser):
     try:
         # Открытие браузера и переход на страницу премиум сайта
         browser.maximize_window()
-        browser.get('https://click.hclips.com')
+        browser.get('https://click.shemalez.com')
 
         # Проверка на отображение блока с текстом
         time.sleep(5)
@@ -31,11 +31,11 @@ def test_domain(browser):
         result = "Test passed successfully" if status == "Total visits" else "Test failed"
 
         # Сохранение результата теста
-        with open("test_results.txt", "w") as file:
+        with open("test_shemalez_results.txt", "w") as file:
             file.write(result)
     except Exception as e:
         result = "Test failed"
-        with open("test_results.txt", "w") as file:
+        with open("test_shemalez_results.txt", "w") as file:
             file.write(result)
         raise e
     time.sleep(5)

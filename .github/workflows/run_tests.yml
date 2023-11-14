@@ -95,3 +95,296 @@ jobs:
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         run: |
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_100homemade.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_100homemade_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (100homemade):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (100homemade):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_chiriporn.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_chiriporn_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (chiriporn):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (chiriporn):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_hclips.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_hclips_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (hclips):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (hclips):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_hdzog.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_hdzog_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (hdzog):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (hdzog):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_hotmovs.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_hotmovs_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (hotmovs):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (hotmovs):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_porn555.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_porn555_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (porn555):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (porn555):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_pornforrelax.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_pornforrelax_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (pornforrelax):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (pornforrelax):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_pornl.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_pornl_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (pornl):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (pornl):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_puporn.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_puporn_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (puporn):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (puporn):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_shemalez.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_shemalez_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (shemalez):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (shemalez):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_shemaleztube.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_shemaleztube_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (shemaleztube):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (shemaleztube):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_thegay.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_thegay_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (thegay):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (thegay):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_tubepornclassic.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_tubepornclassic_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (tubepornclassic):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (tubepornclassic):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_vjav.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_vjav_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (vjav):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (vjav):Test failed" >> $GITHUB_ENV
+          fi
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+
+      - name: Run tests and save the results
+        run: |
+          pytest > test_voyeurhit.txt  || echo "Test failed" > test_results.txt
+
+      - name: Use the test results
+        run: |
+          test_result=$(<test_voyeurhit_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (voyeurhit):Test passed successfully" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (voyeurhit):Test failed" >> $GITHUB_ENV
+          fi
