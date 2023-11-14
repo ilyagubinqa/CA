@@ -36,38 +36,42 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run and save results for test_txxx
+      - name: Run tests and save the results for test_txxx
         run: |
           pytest > test_txxx.txt || echo "Test failed" > test_txxx_results.txt
 
-      - name: Use and send results for test_txxx
+      - name: Use the test results for test_txxx
         run: |
           test_result=$(<test_txxx_results.txt)
           if [ "$test_result" = "Test passed successfully" ]; then
-            TEST_STATUS="Click domains (txxx): Test passed successfully"
+            echo "TEST_STATUS=Click domains (txxx):Test passed successfully" >> $GITHUB_ENV
           else
-            TEST_STATUS="Click domains (txxx): Test failed"
+            echo "TEST_STATUS=Click domains (txxx):Test failed" >> $GITHUB_ENV
           fi
-      
-          echo "Text to be sent: $TEST_STATUS"
-      
-          # Отправить уведомление в Slack
+
+      - name: Send test results for test_txxx to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
 
-      - name: Run and save results for test_pornq
+      - name: Run tests and save the results for test_pornq
         run: |
           pytest > test_pornq.txt || echo "Test failed" > test_pornq_results.txt
 
-      - name: Use and send results for test_pornq
+      - name: Use the test results for test_pornq
         run: |
           test_result=$(<test_pornq_results.txt)
           if [ "$test_result" = "Test passed successfully" ]; then
-            TEST_STATUS="Click domains (pornq): Test passed successfully"
+            echo "TEST_STATUS=Click domains (pornq):Test passed successfully" >> $GITHUB_ENV
           else
-            TEST_STATUS="Click domains (pornq): Test failed"
+            echo "TEST_STATUS=Click domains (pornq):Test failed" >> $GITHUB_ENV
           fi
-      
-          echo "Text to be sent: $TEST_STATUS"
-      
-          # Отправить уведомление в Slack
+
+      - name: Send test results for test_pornq to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
