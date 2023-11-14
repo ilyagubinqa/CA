@@ -21,6 +21,7 @@ jobs:
           pip install pytest
           pip install selenium
           pip install requests
+          pip install pytest-xdist
 
       - name: Install Chrome
         run: |
@@ -38,7 +39,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_txxx.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_txxx.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -58,7 +59,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_pornq.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_pornq.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -78,7 +79,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_upornia.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_upornia.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -98,7 +99,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_100homemade.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_100homemade.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -118,7 +119,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_chikiporn.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_chikiporn.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -138,7 +139,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_hclips.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_hclips.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -158,7 +159,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_hdzog.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_hdzog.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -178,7 +179,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_hotmovs.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_hotmovs.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -198,7 +199,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_porn555.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_porn555.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -218,7 +219,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_pornforrelax.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_pornforrelax.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -238,7 +239,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_pornl.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_pornl.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -258,7 +259,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_puporn.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_puporn.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -278,7 +279,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_shemalez.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_shemalez.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -298,7 +299,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_shemaleztube.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_shemaleztube.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -318,7 +319,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_thegay.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_thegay.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -338,7 +339,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_tubepornclassic.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_tubepornclassic.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -358,7 +359,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_vjav.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_vjav.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
@@ -378,7 +379,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest > test_voyeurhit.txt  || echo "Test failed" > test_results.txt
+          pytest -n auto > test_voyeurhit.txt  || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
