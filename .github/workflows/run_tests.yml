@@ -44,9 +44,9 @@ jobs:
         run: |
           test_result=$(<test_results.txt)
           if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains:Test passed successfully" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (txxx):Test passed successfully" >> $GITHUB_ENV
           else
-            echo "TEST_STATUS=Click domains:Test failed" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (txxx):Test failed" >> $GITHUB_ENV
           fi
 
       - name: Send test results to Slack
