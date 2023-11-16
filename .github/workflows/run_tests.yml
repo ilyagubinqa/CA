@@ -39,7 +39,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          test_names=("txxx" "pornq" "upornia" "100homemade" "chikiporn" "hclips" "hdzog" "hotmovs" "porn555" "pornforrelax" "pornl" "puporn" "shemalez" "shemaleztube" "thegay" "tubepornclassic" "vjav" "voyeurhit")
+          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
 
           for test_name in "${test_names[@]}"; do
             pytest -n auto > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
