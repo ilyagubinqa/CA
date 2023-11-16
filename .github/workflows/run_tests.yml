@@ -40,7 +40,7 @@ jobs:
       - name: Run tests and send results to Slack
         run: |
           results=""
-          for test_name in txxx pornq upornia; do
+          for test_name in txxx upornia; do
             pytest -n auto > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
       
             test_result=$(<"test_${test_name}_results.txt")
