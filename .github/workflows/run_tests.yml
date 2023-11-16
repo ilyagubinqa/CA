@@ -37,24 +37,20 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests and save the results
+      - name: Run tests and send results to Slack
         run: |
-          test_names=("txxx" "pornq" "upornia" "100homemade" "chikiporn" "hclips" "hdzog" "hotmovs" "porn555" "pornforrelax" "pornl" "puporn" "shemalez" "shemaleztube" "thegay" "tubepornclassic" "vjav" "voyeurhit")
-
-          for test_name in "${test_names[@]}"; do
+          results=""
+          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
             pytest -n auto > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
-
+      
             test_result=$(<"test_${test_name}_results.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
-              echo "TEST_STATUS=Click domains ($test_name):Test passed successfully" >> $GITHUB_ENV
+              results+="Click domains ($test_name):Test passed successfully\n"
             else
-              echo "TEST_STATUS=Click domains ($test_name):Test failed" >> $GITHUB_ENV
+              results+="Click domains ($test_name):Test failed\n"
             fi
           done
-
-      - name: Send test results to Slack
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+      
+          echo "$results" > all_test_results.txt
+      
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
