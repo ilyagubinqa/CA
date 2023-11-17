@@ -7,6 +7,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        test_name: ["txxx", "pornq", "upornia", "100homemade", "chikiporn", "hclips", "hdzog", "hotmovs", "porn555", "pornforrelax", "pornl", "puporn", "shemalez", "shemaleztube", "thegay", "tubepornclassic", "vjav", "voyeurhit"]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
