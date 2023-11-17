@@ -45,7 +45,7 @@ jobs:
         run: |
           results=""
           for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            pytest -n 18 auto > "test_${test_name}.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+            pytest -n auto > "test_${test_name}.txt" || echo "Test failed" > "test_${test_name}_results.txt"
 
             test_result=$(<"test_${test_name}_results.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
@@ -63,5 +63,5 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         run: |
-          RESULTS=$(<"all_test_results.txt")
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$RESULTS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$RESULTS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          TEST_STATUS=$(<all_test_results.txt)
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" }" $SLACK_WEBHOOK_URL
