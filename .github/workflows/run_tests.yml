@@ -7,6 +7,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        test_name: ['txxx', 'pornq', 'upornia', '100homemade', 'chikiporn', 'hclips', 'hdzog', 'hotmovs', 'porn555', 'pornforrelax', 'pornl', 'puporn', 'shemalez', 'shemaleztube', 'thegay', 'tubepornclassic', 'vjav', 'voyeurhit']
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -39,20 +43,20 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          test_results=""
-          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            pytest -k $test_name > "test_${test_name}.txt" || echo "Test failed" > "test_${test_name}_results.txt"
-            test_status=$(<"test_${test_name}_results.txt")
-            test_results="$test_results\nClick domains ($test_name): $test_status"
-          done
-
-          echo "TEST_STATUS=$test_results" >> $GITHUB_ENV
+          pytest -k ${{ matrix.test_name }} > "test_${{ matrix.test_name }}.txt" || echo "Test failed" > "test_${{ matrix.test_name }}_results.txt"
 
       - name: Send test results to Slack
-        if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         run: |
+          test_results=""
+          for test_name in 'txxx' 'pornq' 'upornia' '100homemade' 'chikiporn' 'hclips' 'hdzog' 'hotmovs' 'porn555' 'pornforrelax' 'pornl' 'puporn' 'shemalez' 'shemaleztube' 'thegay' 'tubepornclassic' 'vjav' 'voyeurhit'; do
+            test_status=$(<"test_${test_name}_results.txt")
+            test_results="$test_results\nClick domains ($test_name): $test_status"
+          done
+
+          echo "TEST_STATUS=\"$test_results\"" >> $GITHUB_ENV
           TEST_STATUS=$(awk '/TEST_STATUS/ {print}' $GITHUB_ENV)
+
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
