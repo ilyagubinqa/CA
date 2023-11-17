@@ -37,39 +37,24 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests and save the results for all domains
+      - name: Run tests and save the results
         run: |
-          pytest -n auto > test_txxx.txt || echo "Test failed" > test_results.txt
-          pytest -n auto > test_pornq.txt || echo "Test failed" >> test_results.txt
-          pytest -n auto > test_upornia.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_100homemade.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_chikiporn.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_hclips.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_hdzog.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_hotmovs.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_porn555.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_pornforrelax.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_pornl.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_puporn.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_shemalez.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_shemaleztube.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_thegay.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_tubepornclassic.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_vjav.txt  || echo "Test failed" > test_results.txt
-          pytest -n auto > test_voyeurhit.txt  || echo "Test failed" > test_results.txt
+          domains=("txxx" "pornq" "upornia" "100homemade" "chikiporn" "hclips" "hdzog" "hotmovs" "porn555" "pornforrelax" "pornl" "puporn" "shemalez" "shemaleztube" "thegay" "tubepornclassic" "vjav" "voyeurhit")
 
-      - name: Use the test results
-        run: |
-          test_results=$(cat test_results.txt)
-          if [ -z "$test_results" ]; then
-            echo "TEST_STATUS=Click domains (${domain}):Test passed successfully ✅" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Click domains (${domain}):Test failed ❌" >> $GITHUB_ENV
-          fi
+          for domain in "${domains[@]}"; do
+            pytest -n auto > "test_${domain}.txt" || echo "Test failed" > "test_${domain}_results.txt"
+          done
 
-      - name: Send test results to Slack
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - name: Use the test results and send to Slack
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          for domain in "${domains[@]}"; do
+            test_result=$(<"test_${domain}_results.txt")
+            if [ -z "$test_result" ]; then
+              echo "TEST_STATUS=Click domains (${domain}):Test passed successfully ✅" >> $GITHUB_ENV
+            else
+              echo "TEST_STATUS=Click domains (${domain}):Test failed ❌" >> $GITHUB_ENV
+            fi
+
+            # Send test results to Slack
+            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
+          done
