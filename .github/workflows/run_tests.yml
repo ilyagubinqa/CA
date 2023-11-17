@@ -7,10 +7,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        test_name: ["txxx", "pornq", "upornia", "100homemade", "chikiporn", "hclips", "hdzog", "hotmovs", "porn555", "pornforrelax", "pornl", "puporn", "shemalez", "shemaleztube", "thegay", "tubepornclassic", "vjav", "voyeurhit"]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -43,22 +39,15 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest -n auto > test_${{ matrix.test_name }}.txt || echo "Test failed" > test_${{ matrix.test_name }}_results.txt
+          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
+            pytest -n auto > "test_${test_name}.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+            test_result=$(<"test_${test_name}_results.txt")
+            if [ "$test_result" = "Test passed successfully" ]; then
+              echo "TEST_STATUS=Click domains (${test_name}):Test passed successfully" >> $GITHUB_ENV
+            else
+              echo "TEST_STATUS=Click domains (${test_name}):Test failed" >> $GITHUB_ENV
+            fi
 
-      - name: Use the test results
-        run: |
-          test_result=$(<test_${{ matrix.test_name }}_results.txt)
-          if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (${{ matrix.test_name }}):Test passed successfully ✅" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Click domains (${{ matrix.test_name }}):Test failed ❌" >> $GITHUB_ENV
-          fi
-
-      - name: Send test results to Slack
-        if: matrix.test_name == 'voyeurhit'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        run: |
-          TEST_STATUS=$(awk '/TEST_STATUS/ {print}' $GITHUB_ENV)
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+            # Send test results to Slack
+            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
+          done
