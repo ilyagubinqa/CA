@@ -37,22 +37,58 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests and save the results
+name: Automated tests
+
+on:
+  push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install pytest
+          pip install selenium
+          pip install requests
+          pip install pytest-xdist
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install google-chrome-stable
+
+      - name: Set DISPLAY variable
+        run: echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      - name: Install Xvfb
+        run: sudo apt-get install xvfb
+
+      - name: Start Xvfb
+        run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
+      - name: Run tests and send results to Slack
         run: |
           domains=("txxx" "pornq" "upornia" "100homemade" "chikiporn" "hclips" "hdzog" "hotmovs" "porn555" "pornforrelax" "pornl" "puporn" "shemalez" "shemaleztube" "thegay" "tubepornclassic" "vjav" "voyeurhit")
 
           for domain in "${domains[@]}"; do
-            pytest -n auto > "test_${domain}.txt" || echo "Test failed" > "test_${domain}_results.txt"
-          done
+            pytest -n auto > "test_${domain}.txt" || echo "Test failed for ${domain} ❌" > "test_${domain}_results.txt"
 
-      - name: Use the test results and send to Slack
-        run: |
-          for domain in "${domains[@]}"; do
+            # Use the test results and send to Slack
             test_result=$(<"test_${domain}_results.txt")
             if [ -z "$test_result" ]; then
               echo "TEST_STATUS=Click domains (${domain}):Test passed successfully ✅" >> $GITHUB_ENV
             else
-              echo "TEST_STATUS=Click domains (${domain}):Test failed ❌" >> $GITHUB_ENV
+              echo "TEST_STATUS=Click domains (${domain}):${test_result}" >> $GITHUB_ENV
             fi
 
             # Send test results to Slack
