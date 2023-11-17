@@ -41,20 +41,24 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests and send results to Slack
+      - name: Run tests and save the results
         run: |
-          results=""
           for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            pytest -n auto > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
-      
+            pytest -n auto > "test_${test_name}.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+
             test_result=$(<"test_${test_name}_results.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
-              results+="Click domains ($test_name):Test passed successfully ✅\n"
+              echo "TEST_STATUS=Click domains ($test_name):Test passed successfully ✅" >> $GITHUB_ENV
             else
-              results+="Click domains ($test_name):Test failed ❌\n"
+              echo "TEST_STATUS=Click domains ($test_name):Test failed ❌" >> $GITHUB_ENV
             fi
           done
-      
-          echo "$results" > all_test_results.txt
-      
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send test results to Slack
+        if: startsWith(matrix.test_name, 'txxx') || startsWith(matrix.test_name, 'pornq') || startsWith(matrix.test_name, 'upornia') || startsWith(matrix.test_name, '100homemade') || startsWith(matrix.test_name, 'chikiporn') || startsWith(matrix.test_name, 'hclips') || startsWith(matrix.test_name, 'hdzog') || startsWith(matrix.test_name, 'hotmovs') || startsWith(matrix.test_name, 'porn555') || startsWith(matrix.test_name, 'pornforrelax') || startsWith(matrix.test_name, 'pornl') || startsWith(matrix.test_name, 'puporn') || startsWith(matrix.test_name, 'shemalez') || startsWith(matrix.test_name, 'shemaleztube') || startsWith(matrix.test_name, 'thegay') || startsWith(matrix.test_name, 'tubepornclassic') || startsWith(matrix.test_name, 'vjav') || startsWith(matrix.test_name, 'voyeurhit')
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          TEST_STATUS=$(awk '/TEST_STATUS/ {print}' $GITHUB_ENV)
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
