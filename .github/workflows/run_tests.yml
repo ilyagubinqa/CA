@@ -60,7 +60,7 @@ jobs:
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
       - name: Run tests and save the results
-        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
+        run: pytest -n auto >> test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
