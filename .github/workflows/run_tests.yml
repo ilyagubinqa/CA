@@ -61,7 +61,7 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          pytest -n auto > test_results.txt || echo "Test failed" > test_results.txt
+          pytest -n auto > test_results.txt || (echo "Test failed" > test_results.txt && exit 1)
 
       - name: Use the test results
         run: |
