@@ -27,22 +27,30 @@ jobs:
         run: sudo apt-get install xvfb
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      - name: Run tests and send results to Slack
+      - name: Run tests and save the results
         run: |
           domains=("txxx" "pornq" "upornia" "100homemade" "chikiporn" "hclips" "hdzog" "hotmovs" "porn555" "pornforrelax" "pornl" "puporn" "shemalez" "shemaleztube" "thegay" "tubepornclassic" "vjav" "voyeurhit")
 
           for domain in "${domains[@]}"; do
-            # Run tests and save the results
             pytest -n auto > "test_${domain}.txt" || echo "Test failed" > "test_${domain}_results.txt"
-
+            
             # Use the test results
             test_result=$(<"test_${domain}_results.txt")
-            if [ "$test_result" = "Test passed successfully" ]; then
-              echo "TEST_STATUS=Click domains (${domain}):Test passed successfully ✅" >> $GITHUB_ENV
+            
+            if [ -z "$test_result" ]; then
+              TEST_STATUS+=("Click domains (${domain}):Test passed successfully ✅")
             else
-              echo "TEST_STATUS=Click domains (${domain}):Test failed ❌" >> $GITHUB_ENV
+              TEST_STATUS+=("Click domains (${domain}):Test failed ❌")
             fi
-
-            # Send test results to Slack
-            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
           done
+
+      - name: Send test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: |
+          # Combine test results into a single string
+          TEST_RESULTS_STRING=$(IFS=$'\n'; echo "${TEST_STATUS[*]}")
+
+          # Send test results to Slack
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_RESULTS_STRING\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_RESULTS_STRING\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
