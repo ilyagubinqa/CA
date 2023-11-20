@@ -59,24 +59,21 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests for each domain and save the results
-        run: |
-          for domain in ${{ matrix.domain }}; do
-            pytest -n auto -k "$domain" -o junit_family=xunit2 -o junit_logging=all > test_$domain.xml || echo "Test failed" > test_$domain.xml
-          done
+      - name: Run tests and save the results
+        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
 
-      - name: Combine test results
-        run: cat test_*.xml > test_results.xml
+      - name: Use the test results
+        run: |
+          test_result=$(<test_${{ matrix.domain }}_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
+          fi
 
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          test_result=$(<test_results.xml)
-          if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=All tests passed successfully ✅" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Some tests failed ❌" >> $GITHUB_ENV
-          fi
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
