@@ -62,18 +62,18 @@ jobs:
       - name: Run tests for each domain and save the results
         run: |
           for domain in ${{ matrix.domain }}; do
-            pytest -n auto -k "$domain" --json-report > test_$domain.json || echo "Test failed" > test_$domain.json
+            pytest -n auto -k "$domain" -o junit_family=xunit2 -o junit_logging=all > test_$domain.xml || echo "Test failed" > test_$domain.xml
           done
 
       - name: Combine test results
-        run: cat test_*.json > test_results.json
+        run: cat test_*.xml > test_results.xml
 
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          test_result=$(<test_results.json)
+          test_result=$(<test_results.xml)
           if [ "$test_result" = "Test passed successfully" ]; then
             echo "TEST_STATUS=All tests passed successfully ✅" >> $GITHUB_ENV
           else
