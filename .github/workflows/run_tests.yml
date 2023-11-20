@@ -28,6 +28,7 @@ jobs:
           - tubepornclassic
           - vjav
           - voyeurhit
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -58,21 +59,19 @@ jobs:
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Run tests and save the results
-        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
-
-      - name: Use the test results
+      - name: Run tests and append the results to a file
         run: |
-          test_result=$(<test_${{ matrix.domain }}_results.txt)
-          if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
-          fi
+          pytest -n auto >> test_results.txt || echo "Test failed" > test_results.txt
 
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
+          test_result=$(<test_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=All tests passed successfully ✅" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Some tests failed ❌" >> $GITHUB_ENV
+          fi
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
