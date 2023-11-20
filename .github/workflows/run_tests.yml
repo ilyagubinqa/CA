@@ -1,56 +1,61 @@
 name: Automated tests
+
 on:
   push
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
       - name: Install dependencies
         run: |
           pip install pytest
           pip install selenium
           pip install requests
           pip install pytest-xdist
+
       - name: Install Chrome
         run: |
           sudo apt-get update
           sudo apt-get install google-chrome-stable
+
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
+
       - name: Install Xvfb
         run: sudo apt-get install xvfb
+
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      - name: Run tests and save the results
+
+      - name: Run all tests and save the results
         run: |
           domains=("txxx" "pornq" "upornia" "100homemade" "chikiporn" "hclips" "hdzog" "hotmovs" "porn555" "pornforrelax" "pornl" "puporn" "shemalez" "shemaleztube" "thegay" "tubepornclassic" "vjav" "voyeurhit")
 
           for domain in "${domains[@]}"; do
             pytest -n auto > "test_${domain}.txt" || echo "Test failed" > "test_${domain}_results.txt"
-            
-            # Use the test results
-            test_result=$(<"test_${domain}_results.txt")
-            
-            if [ -z "$test_result" ]; then
-              TEST_STATUS+=("Click domains (${domain}):Test passed successfully ✅")
-            else
-              TEST_STATUS+=("Click domains (${domain}):Test failed ❌")
-            fi
           done
 
-      - name: Send test results to Slack
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - name: Use the test results and send to Slack
         run: |
-          # Combine test results into a single string
-          TEST_RESULTS_STRING=$(IFS=$'\n'; echo "${TEST_STATUS[*]}")
+          message=""
+          for domain in "${domains[@]}"; do
+            test_result=$(<"test_${domain}_results.txt")
+            if [ -z "$test_result" ]; then
+              echo "TEST_STATUS=Click domains (${domain}): Test passed successfully ✅" >> $GITHUB_ENV
+            else
+              echo "TEST_STATUS=Click domains (${domain}): Test failed ❌" >> $GITHUB_ENV
+            fi
+            message+="Click domains (${domain}): $test_result\n"
+          done
 
-          # Send test results to Slack
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_RESULTS_STRING\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_RESULTS_STRING\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$message\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$message\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
