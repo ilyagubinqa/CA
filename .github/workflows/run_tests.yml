@@ -78,16 +78,4 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          
-          cat test_*.txt > combined_results.txt
-          
-          test_results=$(<combined_results.txt)
-          
-          if grep -q "Test failed" combined_results.txt; then
-            overall_status="❌ Test failed"
-          else
-            overall_status="✅ Test passed successfully"
-          fi
-          
-          # Send the overall test status to Slack
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$overall_status\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$overall_status\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
