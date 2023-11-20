@@ -47,8 +47,8 @@ jobs:
 
       - name: Install Chrome
         run: |
-          sudo apt-get update --allow-change-held-packages --fix-missing
-          sudo apt-get install google-chrome-stable
+          sudo apt-get update --fix-missing
+          sudo apt-get install -o Dpkg::Options::="--force-confnew" --reinstall google-chrome-stable
 
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
