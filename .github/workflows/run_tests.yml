@@ -78,4 +78,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          for domain in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
+            status_var="TEST_STATUS_$domain"
+            curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"${!status_var}\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"${!status_var}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          done
