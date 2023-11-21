@@ -64,7 +64,7 @@ jobs:
       - name: Run tests and send results to Slack
         run: |
           results=""
-          for domain in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
+          for domain in ${{ matrix.domain }}; do
             pytest -n auto > "test_${domain}.txt" || echo "Test failed" > "test_${domain}_results.txt"
       
             test_result=$(<"test_${domain}_results.txt")
