@@ -66,7 +66,6 @@ jobs:
           results=""
           for domain in ${{ matrix.domain }}; do
             pytest -n auto > "test_${domain}.txt" || echo "Test failed" > "test_${domain}_results.txt"
-      
             test_result=$(<"test_${domain}_results.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
               results+="Click domains (${domain}):Test passed successfully ✅\n"
@@ -76,4 +75,5 @@ jobs:
           done
 
           echo "$results" > all_test_results.txt
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
+          
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$(cat all_test_results.txt)\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$(cat all_test_results.txt)\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
