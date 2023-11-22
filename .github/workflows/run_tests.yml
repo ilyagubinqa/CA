@@ -1,7 +1,17 @@
 name: Automated tests
 
 on:
-  push
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default: first_test
+        type: choice
+        options:
+          - first_test
+          - second test
+
 
 jobs:
   test:
@@ -49,6 +59,16 @@ jobs:
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get install -o Dpkg::Options::="--force-confnew" --reinstall google-chrome-stable
+
+      - name: first_test
+        if: "github.event.inputs.deployment_target == 'first_test'"
+        run: pytest test_txxx.py::test_domain --alluredir=allure-results
+        continue-on-error: true
+
+      - name: second_test
+        if: "github.event.inputs.deployment_target == 'second_test'"
+        run: pytest test_pornq.py::test_domain --alluredir=allure-results
+        continue-on-error: true
 
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
