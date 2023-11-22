@@ -2,12 +2,6 @@ name: Automated tests
 
 on:
   workflow_dispatch:
-    inputs:
-      deployment_target:
-        description: 'Choose domains'
-        required: true
-        type: string
-        default: 'all'
 
 jobs:
   test:
