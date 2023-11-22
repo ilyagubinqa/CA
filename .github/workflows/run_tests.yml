@@ -4,13 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       deployment_target:
-        description: Choose target
+        description: 'Choose domains'
         required: true
-        default: test_txxx
-        type: choice
-        options:
-          - test_txxx
-          - test_pornq
+        type: string
+        default: 'all'
 
 jobs:
   test:
@@ -19,8 +16,7 @@ jobs:
     strategy:
       matrix:
         domain:
-          - txxx
-          - pornq
+          - ${{ github.event.inputs.deployment_target }}
 
     steps:
       - name: Checkout repository
@@ -55,15 +51,15 @@ jobs:
           sleep 3 
 
       - name: Run tests and save the results
-        run: pytest -n auto > test_results.txt || echo "Test failed" > test_results.txt
+        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
 
       - name: Use the test results
         run: |
-          test_result=$(<test_results.txt)
+          test_result=$(<test_${{ matrix.domain }}_results.txt)
           if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (${{ github.event.inputs.deployment_target }}):Test passed successfully ✅" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
           else
-            echo "TEST_STATUS=Click domains (${{ github.event.inputs.deployment_target }}):Test failed ❌" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
           fi
 
       - name: Send test results to Slack
