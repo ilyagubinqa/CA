@@ -1,7 +1,13 @@
 name: Automated tests
 
 on:
-  push
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: 'Choose domains'
+        required: true
+        type: string
+        default: 'all'
 
 jobs:
   test:
