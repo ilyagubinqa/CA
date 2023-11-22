@@ -2,6 +2,15 @@ name: Automated tests
 
 on:
   workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default: second_test
+        type: choice
+        options:
+          - test_txxx
+          - test_pornq
 
 jobs:
   test:
@@ -12,22 +21,6 @@ jobs:
         domain:
           - txxx
           - pornq
-          - upornia
-          - 100homemade
-          - chikiporn
-          - hclips
-          - hdzog
-          - hotmovs
-          - porn555
-          - pornforrelax
-          - pornl
-          - puporn
-          - shemalez
-          - shemaleztube
-          - thegay
-          - tubepornclassic
-          - vjav
-          - voyeurhit
 
     steps:
       - name: Checkout repository
@@ -61,8 +54,13 @@ jobs:
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           sleep 3 
 
-      - name: Run tests and save the results
-        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
+      - name: first_test
+        if: "github.event.inputs.deployment_target == 'test_txxx'"
+        run: pytest test_txxx.py::test_domain --alluredir=allure-results
+
+      - name: second_test
+        if: "github.event.inputs.deployment_target == 'test_pornq'"
+        run: pytest test_pornq.py::test_domain --alluredir=allure-results
 
       - name: Use the test results
         run: |
