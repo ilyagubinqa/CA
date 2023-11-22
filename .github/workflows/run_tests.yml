@@ -4,11 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       deployment_target:
-        description: Choose target
+        description: 'Choose domains'
         required: true
-        type: choice
-        options:
-          - all
+        type: string
+        default: 'all'
 
 jobs:
   test:
