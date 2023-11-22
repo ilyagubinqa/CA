@@ -1,13 +1,7 @@
 name: Automated tests
 
 on:
-  workflow_dispatch:
-    inputs:
-      deployment_target:
-        description: 'Choose domains'
-        required: true
-        type: string
-        default: 'all'
+  push
 
 jobs:
   test:
@@ -16,7 +10,24 @@ jobs:
     strategy:
       matrix:
         domain:
-          - ${{ github.event.inputs.deployment_target }}
+          - txxx
+          - pornq
+          - upornia
+          - 100homemade
+          - chikiporn
+          - hclips
+          - hdzog
+          - hotmovs
+          - porn555
+          - pornforrelax
+          - pornl
+          - puporn
+          - shemalez
+          - shemaleztube
+          - thegay
+          - tubepornclassic
+          - vjav
+          - voyeurhit
 
     steps:
       - name: Checkout repository

@@ -13,6 +13,7 @@ slack_webhook_url = 'https://hooks.slack.com/services/T0E52C0NT/B05U13WV2E4/4tL2
 def browser():
     options = Options()
     options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
     chrome_browser = webdriver.Chrome(options=options)
     chrome_browser.implicitly_wait(5)
     return chrome_browser
@@ -21,10 +22,9 @@ def test_domain(browser):
     try:
         # Открытие браузера и переход на страницу премиум сайта
         browser.maximize_window()
-        browser.get('https://click.txxx.com')
 
         # Проверка на отображение блока с текстом
-        time.sleep(5)
+        time.sleep(10)
         status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
         status = status_element.text
         print(status)
@@ -38,4 +38,4 @@ def test_domain(browser):
         with open("test_txxx_results.txt", "w") as file:
             file.write(result)
         raise e
-    time.sleep(5)
+    time.sleep(10)
