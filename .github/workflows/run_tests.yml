@@ -79,11 +79,3 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
-
-      - manual-trigger:
-        if: github.event_name == 'Automated tests' && github.event.workflow_run.event == 'workflow_run' && github.actor == 'ilyagubinqa'
-        needs: test
-        runs-on: ubuntu-latest
-        steps:
-          - name: Trigger workflow manually
-            run: echo "Workflow triggered manually"
