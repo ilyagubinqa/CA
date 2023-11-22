@@ -39,4 +39,4 @@ def test_domain(browser):
         with open("test_vjav_results.txt", "w") as file:
             file.write(result)
         raise e
-    time.sleep(5)
+    time.sleep(10)
