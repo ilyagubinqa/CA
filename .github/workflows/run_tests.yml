@@ -68,9 +68,9 @@ jobs:
         run: |
           test_result=$(<test_${{ matrix.domain }}_results.txt)
           if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅ " >> $GITHUB_ENV
           else
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌ " >> $GITHUB_ENV
           fi
 
       - name: Send test results to Slack
