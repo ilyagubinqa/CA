@@ -1,3 +1,4 @@
+
 name: Automated tests
 
 on:
@@ -44,12 +45,10 @@ jobs:
           pip install selenium
           pip install requests
           pip install pytest-xdist
-
       - name: Install Chrome
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get install -o Dpkg::Options::="--force-confnew" --reinstall google-chrome-stable
-
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
 
@@ -59,8 +58,7 @@ jobs:
       - name: Start Xvfb
         run: |
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          sleep 3 
-
+          sleep 3
       - name: Run tests and save the results
         run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
 
@@ -70,9 +68,8 @@ jobs:
           if [ "$test_result" = "Test passed successfully" ]; then
             echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
           else
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌ >> $GITHUB_ENV
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
           fi
-
       - name: Send test results to Slack
         if: always()
         env:
