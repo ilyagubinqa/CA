@@ -15,28 +15,28 @@ def browser():
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(6)
+    chrome_browser.implicitly_wait(10)
     return chrome_browser
 
 def test_domain(browser):
     try:
         # Открытие браузера и переход на страницу премиум сайта
         browser.maximize_window()
-        browser.get('https://click.shemalez.tube')
+        browser.get('https://click.hdzog.com')
 
         # Проверка на отображение блока с текстом
-        time.sleep(5)
+        time.sleep(10)
         status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
         status = status_element.text
         print(status)
         result = "Test passed successfully" if status == "Total visits" else "Test failed"
 
         # Сохранение результата теста
-        with open("test_shemaleztube_results.txt", "w") as file:
+        with open("test_hdzog_results.txt", "w") as file:
             file.write(result)
     except Exception as e:
         result = "Test failed"
-        with open("test_shemaleztube_results.txt", "w") as file:
+        with open("test_hdzog_results.txt", "w") as file:
             file.write(result)
         raise e
-    time.sleep(5)
+    time.sleep(10)

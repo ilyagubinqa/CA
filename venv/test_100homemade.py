@@ -15,14 +15,14 @@ def browser():
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(6)
+    chrome_browser.implicitly_wait(10)
     return chrome_browser
 
 def test_domain(browser):
     try:
         # Открытие браузера и переход на страницу премиум сайта
         browser.maximize_window()
-        browser.get('https://click.porn555.com')
+        browser.get('https://click.100homemade.com')
 
         # Проверка на отображение блока с текстом
         time.sleep(5)
@@ -32,11 +32,11 @@ def test_domain(browser):
         result = "Test passed successfully" if status == "Total visits" else "Test failed"
 
         # Сохранение результата теста
-        with open("test_porn555_results.txt", "w") as file:
+        with open("test_100homemade_results.txt", "w") as file:
             file.write(result)
     except Exception as e:
         result = "Test failed"
-        with open("test_porn555_results.txt", "w") as file:
+        with open("test_100homemade_results.txt", "w") as file:
             file.write(result)
         raise e
-    time.sleep(5)
+    time.sleep(10)
