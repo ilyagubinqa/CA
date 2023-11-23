@@ -62,24 +62,20 @@ jobs:
           sleep 3 
 
       - name: Run tests and save the results
-        run: pytest -n auto > "test_${{ matrix.domain }}.txt" || echo "Test failed" > "test_${{ matrix.domain }}_results.txt"
+        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
 
-      - name: Collect results
+      - name: Use the test results
         run: |
-          for domain in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            result=$(<"test_${domain}_results.txt")
-            if [ "$result" = "Test passed successfully" ]; then
-              echo "Click domains ($domain): $result ✅" >> all_test_results.txt
-            else
-              echo "Click domains ($domain): $result ❌" >> all_test_results.txt
-            fi
-          done
+          test_result=$(<test_${{ matrix.domain }}_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
+          fi
 
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          results=$(<all_test_results.txt)
-          echo "::set-output name=results::$results"
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
