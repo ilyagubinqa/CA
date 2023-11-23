@@ -1,4 +1,3 @@
-
 name: Automated tests
 
 on:
@@ -45,10 +44,12 @@ jobs:
           pip install selenium
           pip install requests
           pip install pytest-xdist
+
       - name: Install Chrome
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get install -o Dpkg::Options::="--force-confnew" --reinstall google-chrome-stable
+
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
 
@@ -58,28 +59,27 @@ jobs:
       - name: Start Xvfb
         run: |
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          sleep 3
-      - name: Run tests and save the results
-        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
+          sleep 3 
 
-      - name: Use the test results
+      - name: Run tests and save the results
+        run: pytest -n auto > "test_${{ matrix.domain }}.txt" || echo "Test failed" > "test_${{ matrix.domain }}_results.txt"
+
+      - name: Collect results
         run: |
-          test_result=$(<test_${{ matrix.domain }}_results.txt)
-          if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
-          fi
+          for domain in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
+            result=$(<"test_${domain}_results.txt")
+            if [ "$result" = "Test passed successfully" ]; then
+              echo "Click domains ($domain): $result ✅" >> all_test_results.txt
+            else
+              echo "Click domains ($domain): $result ❌" >> all_test_results.txt
+            fi
+          done
+
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          results=""
-          for domain in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            result=$(<"test_${domain}_results.txt")
-            results+="Click domains ($domain): $result\n"
-          done
-
+          results=$(<all_test_results.txt)
           echo "::set-output name=results::$results"
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
