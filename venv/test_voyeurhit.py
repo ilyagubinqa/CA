@@ -15,7 +15,7 @@ def browser():
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(5)
+    chrome_browser.implicitly_wait(10)
     return chrome_browser
 
 def test_domain(browser):
@@ -25,7 +25,7 @@ def test_domain(browser):
         browser.get('https://click.voyeurhit.com')
 
         # Проверка на отображение блока с текстом
-        time.sleep(5)
+        time.sleep(10)
         status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="__nuxt"]/div/div/main/section[2]/div/div[1]/div[1]/div[1]/p')))
         status = status_element.text
         print(status)
@@ -39,4 +39,4 @@ def test_domain(browser):
         with open("test_voyeurhit_results.txt", "w") as file:
             file.write(result)
         raise e
-    time.sleep(5)
+    time.sleep(10)
