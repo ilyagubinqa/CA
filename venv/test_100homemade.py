@@ -39,4 +39,4 @@ def test_domain(browser):
         with open("test_100homemade_results.txt", "w") as file:
             file.write(result)
         raise e
-    time.sleep(10)
+    time.sleep(9)
