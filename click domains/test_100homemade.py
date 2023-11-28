@@ -15,7 +15,7 @@ def browser():
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     chrome_browser = webdriver.Chrome(options=options)
-    chrome_browser.implicitly_wait(9)
+    chrome_browser.implicitly_wait(10)
     return chrome_browser
 
 def test_domain(browser):
