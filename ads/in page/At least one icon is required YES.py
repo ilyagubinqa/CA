@@ -43,19 +43,15 @@ def test_banner(browser):
 
     # Заполнение полей для создания креатива
     url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[1]/div[2]/div/div[1]/div')))
-    url.click()
-    pyautogui.typewrite('https://app.clickadilla.com')
+    ActionChains(browser).click(url).perform()
+    ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
     title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[3]/div[2]/div/div[1]/div')))
-    title.click()
-    pyautogui.typewrite('test')
+    ActionChains(browser).click(title).perform()
+    ActionChains(browser).send_keys('test').perform()
+    description = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[5]/div[2]/div/div[1]/div')))
+    ActionChains(browser).click(description).perform()
+    ActionChains(browser).send_keys('test').perform()
     time.sleep(3)
-
-    # Загрузка файла для креатива
-    image = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//input[@type = 'file']")))
-    image.send_keys("C:\PycharmProjects\img\jpeg2.jpg")
-    done = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'doka--button-action-confirm') and span[text()='Done']]")))
-    done.click()
-    time.sleep(15)
 
     # Отправка запроса на создание in page
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
@@ -63,7 +59,18 @@ def test_banner(browser):
 
     # Вывод сообщения об ошибке
     time.sleep(2)
-    error_element = driver.find_element(By.CSS_SELECTOR, ".v-messages__message")
-    error_message = error_element.text
-    print(error_message)
-    sleep(30)
+
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
+
+    # Текст элемента
+    details_text = details_element.text
+
+    # Проверка на то, что ошибка содержит текст
+    error_message = "At least one icon is required."
+
+    if error_message in details_text:
+        print("Test passed successfully")
+    else:
+        print("Test failed")
+    time.sleep(30)
