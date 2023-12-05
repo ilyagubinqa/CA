@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def browser():
     options = Options()
-    options.add_argument('--headless')
+
     chrome_browser = webdriver.Chrome(options=options)
     chrome_browser.implicitly_wait(25)
     return chrome_browser
@@ -17,7 +17,7 @@ def browser():
 def test_banner(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.maximize_window()
-    browser.get('https://app.staging1.clickadilla.com/login')
+    browser.get('https://staging-app.clickadilla.com/login')
 
     # Ожидание появления полей и ввод данных для авторизации
     wait = WebDriverWait(browser, 55)
@@ -34,13 +34,13 @@ def test_banner(browser):
     element.click()
 
     # Выбор баннера
-    create_banner = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[2]/div[1]/div/div[2]/div/div[4]')))
+    create_banner = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-banner-field')))
     create_banner.click()
-    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//*[@id='app']/div/main/div/div/div/div[1]/a/span/span")))
+    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, "selenium-test-ads-create-ads")))
     create_ads.click()
 
     # Отправка запроса на создание баннера
-    send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
+    send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
     # Вывод сообщения об ошибке
@@ -59,4 +59,4 @@ def test_banner(browser):
         print("Test passed successfully")
     else:
         print("Test failed")
-    time.sleep(30)
+    time.sleep(15)
