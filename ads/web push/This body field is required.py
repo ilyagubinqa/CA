@@ -49,10 +49,6 @@ def test_banner(browser):
     title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-title-0-field')))
     ActionChains(browser).click(title).perform()
     ActionChains(browser).send_keys('tc-advertising3-client').perform()
-    time.sleep(2)
-    body = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-body-0-field')))
-    ActionChains(browser).click(body).perform()
-    ActionChains(browser).send_keys('test').perform()
     time.sleep(3)
 
     # Загрузка файла для креатива
@@ -66,15 +62,20 @@ def test_banner(browser):
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
-    # Вывод сообщения о создании креатива
-    time.sleep(3)
-    status_element = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[3]/div/div/div[3]/div/div/div[1]/button/span')))
-    status = status_element.text
+    # Вывод сообщения об ошибке
+    time.sleep(2)
 
-    if status == "Start Another Campaign":
-        print("Your Ad Campaign created successfully")
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
+
+    # Текст элемента
+    details_text = details_element.text
+
+    # Проверка на то, что ошибка содержит текст
+    error_message = "This body field is required."
+
+    if error_message in details_text:
+        print("Test passed successfully")
     else:
-        print("Failed to created Ad Campaign")
-
-    time.sleep(20)
+        print("Test failed")
+    time.sleep(30)
