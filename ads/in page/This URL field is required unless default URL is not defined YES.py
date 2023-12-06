@@ -18,7 +18,7 @@ def browser():
 def test_banner(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.maximize_window()
-    browser.get('https://app.staging1.clickadilla.com/login')
+    browser.get('https://staging-app.clickadilla.com/login')
 
     # Ожидание появления полей и ввод данных для авторизации
     wait = WebDriverWait(browser, 55)
@@ -35,17 +35,17 @@ def test_banner(browser):
     element.click()
 
     # Выбор In page
-    create_inpage = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div[12]')))
+    create_inpage = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-in-page-ad-field')))
     create_inpage.click()
-    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/main/div/div[2]/div/div[1]/a/span/span")))
+    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, "selenium-test-ads-create-ads")))
     create_ads.click()
     time.sleep(1)
 
     # Заполнение полей для создания креатива
-    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[3]/div[2]/div/div[1]/div')))
+    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-title-0-field')))
     ActionChains(browser).click(title).perform()
     ActionChains(browser).send_keys('test').perform()
-    description = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[5]/div[2]/div/div[1]/div')))
+    description = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-body-0-field')))
     ActionChains(browser).click(description).perform()
     ActionChains(browser).send_keys('test').perform()
     time.sleep(3)
@@ -58,7 +58,7 @@ def test_banner(browser):
     time.sleep(15)
 
     # Отправка запроса на создание in page
-    send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH,'//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
+    send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
     # Вывод сообщения об ошибке

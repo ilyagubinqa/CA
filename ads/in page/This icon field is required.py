@@ -18,7 +18,7 @@ def browser():
 def test_banner(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.maximize_window()
-    browser.get('https://app.staging1.clickadilla.com/login')
+    browser.get('https://staging-app.clickadilla.com/login')
 
     # Ожидание появления полей и ввод данных для авторизации
     wait = WebDriverWait(browser, 55)
@@ -35,46 +35,44 @@ def test_banner(browser):
     element.click()
 
     # Выбор In page
-    create_inpage = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div[12]')))
+    create_inpage = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-in-page-ad-field')))
     create_inpage.click()
-    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/main/div/div[2]/div/div[1]/a/span/span")))
+    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, "selenium-test-ads-create-ads")))
     create_ads.click()
-    time.sleep(1)
+    time.sleep(3)
 
     # Заполнение полей для создания креатива
-    url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[1]/div[2]/div/div[1]/div')))
+    url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-url-0-field')))
     ActionChains(browser).click(url).perform()
     ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
-    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div[3]/div[2]/div/div[1]/div')))
+    time.sleep(1)
+    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-title-0-field')))
     ActionChains(browser).click(title).perform()
+    ActionChains(browser).send_keys('test').perform()
+    time.sleep(1)
+    description = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-body-0-field')))
+    ActionChains(browser).click(description).perform()
     ActionChains(browser).send_keys('test').perform()
     time.sleep(3)
 
-    # Загрузка файла для креатива
-    image = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//input[@type = 'file']")))
-    image.send_keys("C:\PycharmProjects\img\jpeg2.jpg")
-    done = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'doka--button-action-confirm') and span[text()='Done']]")))
-    done.click()
-    time.sleep(15)
-
     # Отправка запроса на создание in page
-    send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
+    send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
     # Вывод сообщения об ошибке
     time.sleep(2)
 
     # Поиск ошибки
-    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
+    details_element = browser.find_element(By.XPATH, '//*[@id="selenium-test-ad-form-creative-icon-filepond-0-field"]/div[2]/div')
 
     # Текст элемента
     details_text = details_element.text
 
     # Проверка на то, что ошибка содержит текст
-    error_message = "At least one description is required."
+    error_message = "This icon field is required."
 
     if error_message in details_text:
         print("Test passed successfully")
     else:
         print("Test failed")
-    time.sleep(30)
+    time.sleep(15)
