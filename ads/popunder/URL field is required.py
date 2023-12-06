@@ -34,34 +34,13 @@ def test_banner(browser):
     element = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//a[@href='/ads']")))
     element.click()
 
-    # Выбор native ad
-    create_native = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-native-ad-field')))
-    create_native.click()
+    # Выбор попандера
+    create_popunder = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-popunder-field')))
+    create_popunder.click()
     create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, "selenium-test-ads-create-ads")))
     create_ads.click()
 
-    # Заполнение полей для создания креатива
-    common_url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-common-url')))
-    ActionChains(browser).click(common_url).perform()
-    ActionChains(browser).send_keys('q').perform()
-    time.sleep(2)
-    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-title-0-field')))
-    ActionChains(browser).click(title).perform()
-    ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
-    time.sleep(2)
-    url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-url-0-field')))
-    ActionChains(browser).click(url).perform()
-    ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
-    time.sleep(3)
-
-    # Загрузка файла для креатива
-    image = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//input[@type = 'file']")))
-    image.send_keys("C:\PycharmProjects\img\jpeg2.jpg")
-    done = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'doka--button-action-confirm') and span[text()='Done']]")))
-    done.click()
-    time.sleep(15)
-
-    # Отправка запроса на создание Native
+    # Отправка запроса на создание попандера
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
@@ -75,10 +54,10 @@ def test_banner(browser):
     details_text = details_element.text
 
     # Проверка на то, что ошибка содержит текст
-    error_message = "The url should be valid URL"
+    error_message = "URL field is required."
 
     if error_message in details_text:
         print("Test passed successfully")
     else:
         print("Test failed")
-    time.sleep(15)
+    time.sleep(30)

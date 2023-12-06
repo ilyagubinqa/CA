@@ -34,41 +34,39 @@ def test_banner(browser):
     element = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//a[@href='/ads']")))
     element.click()
 
-    # Выбор native ad
-    create_native = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-native-ad-field')))
-    create_native.click()
+    # Выбор notification widget
+    create_widget = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-ios-calendar-field')))
+    create_widget.click()
     create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, "selenium-test-ads-create-ads")))
     create_ads.click()
 
     # Заполнение полей для создания креатива
-    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-title-0-field')))
-    ActionChains(browser).click(title).perform()
-    ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
-    time.sleep(2)
     url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-url-0-field')))
     ActionChains(browser).click(url).perform()
     ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
     time.sleep(3)
+    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-title-0-field')))
+    ActionChains(browser).click(title).perform()
+    ActionChains(browser).send_keys('test').perform()
 
-    # Загрузка файла для креатива
-    image = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//input[@type = 'file']")))
-    image.send_keys("C:\PycharmProjects\img\gifselenium.gif")
-    done = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'doka--button-action-confirm') and span[text()='Done']]")))
-    done.click()
-    time.sleep(15)
-
-    # Отправка запроса на создание Native
+    # Отправка запроса на создание Notification widget
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
-    # Вывод сообщения о создании креатива
-    time.sleep(3)
-    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[3]/div/div/div[3]/div/div/div[1]/button/span')))
-    status = status_element.text
+    # Вывод сообщения об ошибке
+    time.sleep(2)
 
-    if status == "Start Another Campaign":
-        print("Your Ad Campaign created successfully")
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
+
+    # Текст элемента
+    details_text = details_element.text
+
+    # Проверка на то, что ошибка содержит текст
+    error_message = "This description field is required."
+
+    if error_message in details_text:
+        print("Test passed successfully")
     else:
-        print("Failed to created Ad Campaign")
-
-    time.sleep(20)
+        print("Test failed")
+    time.sleep(15)
