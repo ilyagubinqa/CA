@@ -1,11 +1,16 @@
 name: Automated tests
 
 on:
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: '15 20 * * *'
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default: second_test
+        type: choice
+        options:
+          - first_test
+          - second_test
 
 jobs:
   test:
@@ -32,7 +37,6 @@ jobs:
           - tubepornclassic
           - vjav
           - voyeurhit
-
 
     steps:
       - name: Checkout repository
@@ -63,8 +67,13 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           sleep 3
-      - name: Run tests and save the results
-        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
+      - name: first_test
+        if: "github.event.inputs.deployment_target == 'first_test'"
+        run: pytest test_100homemade.py::test_domain
+
+      - name: second_test
+        if: "github.event.inputs.deployment_target == 'second_test'"
+        run: pytest test_chikiporn.py::test_domain
 
       - name: Use the test results
         run: |
