@@ -1,8 +1,11 @@
-
 name: Automated tests
 
 on:
-  push
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '15 20 * * *'
 
 jobs:
   test:
@@ -29,6 +32,7 @@ jobs:
           - tubepornclassic
           - vjav
           - voyeurhit
+
 
     steps:
       - name: Checkout repository
