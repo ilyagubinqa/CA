@@ -34,28 +34,20 @@ def test_banner(browser):
     element = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//a[@href='/ads']")))
     element.click()
 
-    # Выбор In page
-    create_inpage = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-in-page-ad-field')))
-    create_inpage.click()
+    # Выбор Interstitial
+    create_interstitial = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-interstitial-field')))
+    create_interstitial.click()
     create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, "selenium-test-ads-create-ads")))
     create_ads.click()
-    time.sleep(3)
+    time.sleep(1)
 
     # Заполнение полей для создания креатива
     url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-url-0-field')))
     ActionChains(browser).click(url).perform()
     ActionChains(browser).send_keys('https://app.clickadilla.com').perform()
-    time.sleep(1)
-    title = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-title-0-field')))
-    ActionChains(browser).click(title).perform()
-    ActionChains(browser).send_keys('test').perform()
-    time.sleep(1)
-    description = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-body-0-field')))
-    ActionChains(browser).click(description).perform()
-    ActionChains(browser).send_keys('test').perform()
     time.sleep(3)
 
-    # Отправка запроса на создание in page
+    # Отправка запроса на создание Interstitial
     send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
@@ -63,16 +55,16 @@ def test_banner(browser):
     time.sleep(2)
 
     # Поиск ошибки
-    details_element = browser.find_element(By.XPATH, '//*[@id="selenium-test-ad-form-creative-icon-filepond-0-field"]/div[2]/div')
+    details_element = browser.find_element(By.XPATH, '//*[@id="selenium-test-ad-form-creative-image-filepond-0-field"]/div[2]/div')
 
     # Текст элемента
     details_text = details_element.text
 
     # Проверка на то, что ошибка содержит текст
-    error_message = "This icon field is required."
+    error_message = "This field is required."
 
     if error_message in details_text:
         print("Test passed successfully")
     else:
         print("Test failed")
-    time.sleep(15)
+    time.sleep(30)

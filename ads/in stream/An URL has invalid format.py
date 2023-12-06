@@ -18,14 +18,14 @@ def browser():
 def test_banner(browser):
     # Открытие браузера и переход на страницу регистрации
     browser.maximize_window()
-    browser.get('https://app.staging1.clickadilla.com/login')
+    browser.get('https://staging-app.clickadilla.com/login')
 
     # Ожидание появления полей и ввод данных для авторизации
     wait = WebDriverWait(browser, 55)
     login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-    login_input.send_keys('test_selenium04@gmail.com')
+    login_input.send_keys('ilyagubin1234567@gmail.com')
     password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-    password_input.send_keys('test_selenium04@gmail.com')
+    password_input.send_keys('ilyagubin1234567@gmail.com')
     send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
     send_button.click()
     wait = WebDriverWait(browser, 30)
@@ -35,34 +35,41 @@ def test_banner(browser):
     element.click()
 
     # Выбор In Stream
-    create_instream = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div[6]')))
+    create_instream = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ads-tab-item-in-stream-ad-field')))
     create_instream.click()
-    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/main/div/div[2]/div/div[1]/a/span/span")))
+    create_ads = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, "selenium-test-ads-create-ads")))
     create_ads.click()
-    time.sleep(3)
-
-    # Убираем якорь
-    anchor = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[5]/div/div/div/div/div[1]/div[2]/div/div[1]/button[3]')))
-    anchor.click()
+    time.sleep(1)
 
     # Заполнение полей для создания креатива
-    url = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/div[5]/div/div/div/div/div[1]/div[1]/div[1]/div/div/div/div[2]/div/div[1]/div')))
-    url.click()
-    pyautogui.typewrite('q')
-    time.sleep(3)
+    url = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.ID, 'selenium-test-ad-form-creative-url-0-field')))
+    ActionChains(browser).click(url).perform()
+    ActionChains(browser).send_keys('q').perform()
+    time.sleep(1)
 
     # Загрузка файла для креатива
-    video = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//input[@type = 'file']")))
+    video = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, "//input[@type = 'file']")))
     video.send_keys("C:\PycharmProjects\sideo\sample.mp4")
     time.sleep(45)
 
     # Отправка запроса на создание in stream
-    send_button = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '//button[@class="text-subtitle-2 px-8 text-capitalize v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--large primary"]//span[contains(text(),"Save")]')))
+    send_button = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-ad-form-save')))
     send_button.click()
 
     # Вывод сообщения об ошибке
     time.sleep(2)
-    error_element = driver.find_element(By.CSS_SELECTOR, ".v-messages__message")
-    error_message = error_element.text
-    print(error_message)
-    sleep(70)
+
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
+
+    # Текст элемента
+    details_text = details_element.text
+
+    # Проверка на то, что ошибка содержит текст
+    error_message = "An URL has invalid format."
+
+    if error_message in details_text:
+        print("Test passed successfully")
+    else:
+        print("Test failed")
+    time.sleep(30)

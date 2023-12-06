@@ -23,9 +23,9 @@ def test_banner(browser):
     # Ожидание появления полей и ввод данных для авторизации
     wait = WebDriverWait(browser, 55)
     login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-    login_input.send_keys('test_selenium04@gmail.com')
+    login_input.send_keys('ilyagubin1234567@gmail.com')
     password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-    password_input.send_keys('test_selenium04@gmail.com')
+    password_input.send_keys('ilyagubin1234567@gmail.com')
     send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
     send_button.click()
     wait = WebDriverWait(browser, 30)
