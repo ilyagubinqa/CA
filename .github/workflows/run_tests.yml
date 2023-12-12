@@ -62,7 +62,6 @@ jobs:
 
       - name: Run tests and send results to Slack
         run: |
-  
           results=""
           for test_name in "${{ matrix.domain }}"; do
             pytest -n auto > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
