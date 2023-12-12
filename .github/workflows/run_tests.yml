@@ -44,6 +44,7 @@ jobs:
           pip install selenium
           pip install requests
           pip install pytest-xdist
+
       - name: Install Chrome
         run: |
           sudo apt-get update --fix-missing
@@ -60,19 +61,26 @@ jobs:
           sleep 3
 
       - name: Run tests and save the results
-        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
-
-      - name: Use the test results
         run: |
-          test_result=$(<test_${{ matrix.domain }}_results.txt)
-          if [ "$test_result" = "Test passed successfully" ]; then
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
-          else
-            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
-          fi
+          for domain in "${{ matrix.domain }}"; do
+            pytest -k "$domain" > "test_${domain}_result.txt" || echo "Test failed" > "test_${domain}_result.txt"
+          done
+
+          echo "TEST_STATUS=Test results for all domains" >> $GITHUB_ENV
+
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          slack_message=""
+          for domain in "${{ matrix.domain }}"; do
+            test_result=$(<test_${domain}_result.txt)
+            if [ "$test_result" = "Test passed successfully" ]; then
+              slack_message+="Click domains ($domain):Test passed successfully ✅"$'\n'
+            else
+              slack_message+="Click domains ($domain):Test failed ❌"$'\n'
+            fi
+          done
+
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$slack_message\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
