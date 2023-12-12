@@ -60,22 +60,19 @@ jobs:
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           sleep 3
 
-      - name: all test results
-        run: cat test_*_result.txt > all_test_results.txt
-
-      - name: Send test results to Slack
-        if: always()
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Run tests and send results to Slack
         run: |
-          slack_message=""
-          for domain in "${{ matrix.domain }}"; do
-            test_result=$(grep -m 1 "$domain" all_test_results.txt)
+          results=""
+          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
+            pytest -n auto > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+      
+            test_result=$(<"test_${test_name}_results.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
-              slack_message+="Click domains ($domain):Test passed successfully ✅"$'\n'
+              results+="Click domains ($test_name):Test passed successfully ✅\n"
             else
-              slack_message+="Click domains ($domain):Test failed ❌"$'\n'
+              results+="Click domains ($test_name):Test failed ❌\n"
             fi
           done
 
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$slack_message\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
+          echo "$results" > all_test_results.txt
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
