@@ -31,7 +31,7 @@ jobs:
         run: |
           results=""
           for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            pytest -n auto > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+            pytest -n 18 > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
       
             test_result=$(<"test_${test_name}_results.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
