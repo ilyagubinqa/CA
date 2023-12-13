@@ -7,6 +7,28 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        domain:
+          - txxx
+          - pornq
+          - upornia
+          - 100homemade
+          - chikiporn
+          - hclips
+          - hdzog
+          - hotmovs
+          - porn555
+          - pornforrelax
+          - pornl
+          - puporn
+          - shemalez
+          - shemaleztube
+          - thegay
+          - tubepornclassic
+          - vjav
+          - voyeurhit
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -25,8 +47,8 @@ jobs:
 
       - name: Install Chrome
         run: |
-          sudo apt-get update
-          sudo apt-get install google-chrome-stable
+          sudo apt-get update --fix-missing
+          sudo apt-get install -o Dpkg::Options::="--force-confnew" --reinstall google-chrome-stable
 
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
@@ -35,13 +57,15 @@ jobs:
         run: sudo apt-get install xvfb
 
       - name: Start Xvfb
-        run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
 
-      - name: Run tests and send results to Slack
+      - name: Run tests in parallel and send results to Slack
         run: |
           results=""
-          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            pytest > "test_${test_name}_result.txt" || echo "Test failed" > "test_${test_name}_result.txt"
+          for test_name in "${{ matrix.domain }}"; do
+            pytest -n auto > "test_${test_name}_result.txt" || echo "Test failed" > "test_${test_name}_result.txt"
 
             test_result=$(<"test_${test_name}_result.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
