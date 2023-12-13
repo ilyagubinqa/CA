@@ -1,4 +1,5 @@
 name: Automated tests
+
 on:
   push
 
@@ -64,22 +65,20 @@ jobs:
         run: |
           results=""
           for test_name in "${{ matrix.domain }}"; do
-            pytest -n auto > "test_${test_name}.txt" || echo "Click domains ($test_name):Test failed ❌" > "test_${test_name}_results.txt"
+            pytest -n auto > "test_${test_name}.txt" || echo "Click domains ($test_name):Test failed ❌" >> all_test_results.txt
             test_result=$(<"test_${test_name}_results.txt")
-            if [ "$test_result" = "Click domains ($test_name):Test passed successfully ✅" ]; then
-              results+="$test_result\n"
+            if [ "$test_result" = "Test passed successfully" ]; then
+              results+="Click domains ($test_name):Test passed successfully ✅\n"
             else
-              results+="$test_result\n"
+              results+="Click domains ($test_name):Test failed ❌\n"
             fi
           done
 
-      - name: Combine results into one file
-        run: cat test_*_results.txt > all_test_results.txt
+          echo "$results" > all_test_results.txt
 
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          echo "$results" > slack_message.txt
-          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"$(cat slack_message.txt)\"}" $SLACK_WEBHOOK_URL
+          cat all_test_results.txt | curl -X POST -H 'Content-type: application/json' --data-binary @- $SLACK_WEBHOOK_URL
