@@ -62,19 +62,11 @@ jobs:
 
       - name: Run tests and save the results
         run: |
-          results=()
           for test_name in "${{ matrix.domain }}"; do
             pytest -n auto > "test_${test_name}.txt" || echo "Test failed" > "test_${test_name}_results.txt"
-      
-            test_result=$(<"test_${test_name}_results.txt")
-            if [ "$test_result" = "Test passed successfully" ]; then
-              results+=("Click domains ($test_name):Test passed successfully ✅")
-            else
-              results+=("Click domains ($test_name):Test failed ❌")
-            fi
           done
 
-          echo "${results[*]}" > all_test_results.txt
+          cat test_*_results.txt > all_test_results.txt
 
       - name: Send test results to Slack
         if: always()
