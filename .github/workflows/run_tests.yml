@@ -81,4 +81,5 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
+          echo "$results" > slack_message.txt
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"$(cat slack_message.txt)\"}" $SLACK_WEBHOOK_URL
