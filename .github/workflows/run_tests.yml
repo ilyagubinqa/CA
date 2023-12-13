@@ -64,6 +64,12 @@ jobs:
         run: |
           for test_name in "${{ matrix.domain }}"; do
             pytest -n auto > "test_${test_name}.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+            test_result=$(<"test_${test_name}_results.txt")
+            if [ "$test_result" = "Test passed successfully" ]; then
+              results+=("Click domains ($test_name):Test passed successfully ✅")
+            else
+              results+=("Click domains ($test_name):Test failed ❌")
+            fi
           done
 
           cat test_*_results.txt > all_test_results.txt
@@ -73,5 +79,5 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          results=$(<all_test_results.txt)
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" }" $SLACK_WEBHOOK_URL
+          results_str=$(IFS=$'\n'; echo "${results[*]}")
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results_str\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" }" $SLACK_WEBHOOK_URL
