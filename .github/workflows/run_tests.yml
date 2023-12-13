@@ -72,6 +72,7 @@ jobs:
               results+="Click domains ($test_name):Test failed ❌\n"
             fi
           done
+          
 
       - name: Send test results to Slack
         if: always()
