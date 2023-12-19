@@ -29,9 +29,6 @@ jobs:
           - vjav
           - voyeurhit
 
-    outputs:
-      all_test_results: ${{ steps.set_test_results.outputs.all_test_results }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -59,13 +56,7 @@ jobs:
       - name: Install Xvfb
         run: sudo apt-get install xvfb
 
-      - name: Start Xvfb
-        run: |
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          sleep 3
-
       - name: Run tests and set results
-        id: set_test_results
         run: |
           results=""
           for test_name in "${{ matrix.domain }}"; do
@@ -78,11 +69,12 @@ jobs:
             fi
           done
 
-          echo "::set-output name=all_test_results::$results"
+          echo "RESULTS=$results" >> $GITHUB_ENV
 
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"${{ needs.test.outputs.all_test_results }}\" }" $SLACK_WEBHOOK_URL
+          echo "$RESULTS" > all_test_results.txt
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$(<all_test_results.txt)\" }" $SLACK_WEBHOOK_URL
