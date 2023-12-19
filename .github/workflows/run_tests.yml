@@ -79,4 +79,4 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          echo "$results" | curl -X POST -H 'Content-type: application/json' --data-binary @- $SLACK_WEBHOOK_URL
+          echo "{\"text\": \"$results\"}" | curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK_URL
