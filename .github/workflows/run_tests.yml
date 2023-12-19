@@ -82,6 +82,5 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-
-          echo "{\"text\": \"$(<all_test_results.txt | tr '\n' '\n')\" }" > slack_payload.json
+          echo "{\"text\": \"$(<all_test_results.txt | tr '\n' '\\n')\" }" > slack_payload.json
           curl -X POST -H 'Content-type: application/json' --data @slack_payload.json $SLACK_WEBHOOK_URL
