@@ -80,5 +80,5 @@ jobs:
 
         run: |
 
-          echo "{\"text\": \"$ALL_TEST_RESULTS\" }" > slack_payload.json
+          echo '{"text": "'"$ALL_TEST_RESULTS"'"}' > slack_payload.json
           curl -X POST -H 'Content-type: application/json' --data @slack_payload.json $SLACK_WEBHOOK_URL
