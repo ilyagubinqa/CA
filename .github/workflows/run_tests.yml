@@ -81,4 +81,4 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$(<all_test_results.txt | tr '\n' '\\n')\" }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "@all_test_results.txt" $SLACK_WEBHOOK_URL
