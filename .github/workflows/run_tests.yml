@@ -74,7 +74,7 @@ jobs:
             fi
           done
       
-          # Сохраняем результаты в файл
+          # Результат
           printf "%s\n" "${results[@]}" > all_test_results.txt
 
       - name: Send test results to Slack
@@ -82,7 +82,6 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          # Отправляем все результаты в Slack
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$(<all_test_results.txt | tr '\n' '\n')\" }" $SLACK_WEBHOOK_URL
 
-
+          echo "{\"text\": \"$(<all_test_results.txt | tr '\n' '\n')\" }" > slack_payload.json
+          curl -X POST -H 'Content-type: application/json' --data @slack_payload.json $SLACK_WEBHOOK_URL
