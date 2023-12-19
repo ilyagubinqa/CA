@@ -69,12 +69,13 @@ jobs:
             fi
           done
 
-          echo "RESULTS=$results" >> $GITHUB_ENV
+          export RESULTS="$results"
 
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
+
           echo "$RESULTS" > all_test_results.txt
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$(<all_test_results.txt)\" }" $SLACK_WEBHOOK_URL
