@@ -29,6 +29,9 @@ jobs:
           - vjav
           - voyeurhit
 
+    outputs:
+      all_test_results: ${{ steps.set_test_results.outputs.all_test_results }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -61,13 +64,13 @@ jobs:
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           sleep 3
 
-      - name: Run tests and send results to Slack
+      - name: Run tests and set results
+        id: set_test_results
         run: |
           results=""
-          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
-            pytest -n 18 > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+          for test_name in "${{ matrix.domain }}"; do
+            pytest -n auto > "test_${test_name}.txt" || echo "Click domains ($test_name):Test failed ❌" >> all_test_results.txt
             test_result=$(<"test_${test_name}_results.txt")
-
             if [ "$test_result" = "Test passed successfully" ]; then
               results+="Click domains ($test_name):Test passed successfully ✅\n"
             else
@@ -75,5 +78,11 @@ jobs:
             fi
           done
 
-          echo "$results" > all_test_results.txt
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" }" ${{ secrets.SLACK_WEBHOOK_URL }}
+          echo "::set-output name=all_test_results::$results"
+
+      - name: Send test results to Slack
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"${{ needs.test.outputs.all_test_results }}\" }" $SLACK_WEBHOOK_URL
