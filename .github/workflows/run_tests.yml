@@ -56,7 +56,15 @@ jobs:
       - name: Install Xvfb
         run: sudo apt-get install xvfb
 
-      - name: Run tests and set results
+      - name: Start Xvfb
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+
+      - name: Send test results to Slack
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           results=""
           for test_name in "${{ matrix.domain }}"; do
@@ -68,14 +76,6 @@ jobs:
               results+="Click domains ($test_name):Test failed ❌\n"
             fi
           done
-
-          export RESULTS="$results"
-
-      - name: Send test results to Slack
-        if: always()
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-
-          echo "$RESULTS" > all_test_results.txt
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$(<all_test_results.txt)\" }" $SLACK_WEBHOOK_URL
+      
+          echo "{\"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"$results\"}}]}" > slack_payload.json
+          curl -X POST -H 'Content-type: application/json' --data @slack_payload.json $SLACK_WEBHOOK_URL
