@@ -61,20 +61,23 @@ jobs:
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           sleep 3
 
+      - name: Run tests and save the results
+        run: |
+          for test_name in "${{ matrix.domain }}"; do
+            pytest -n auto > "test_${test_name}.txt" || echo "Click domains ($test_name):Test failed ❌" >> all_test_results.txt
+            test_result=$(<"test_${test_name}_results.txt")
+            if [ "$test_result" = "Test passed successfully" ]; then
+              echo "Click domains ($test_name):Test passed successfully ✅" >> all_test_results.txt
+            else
+              echo "Click domains ($test_name):Test failed ❌" >> all_test_results.txt
+            fi
+          done
+
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          results=""
-          for test_name in "${{ matrix.domain }}"; do
-            pytest -n auto > "test_${test_name}.txt" || echo "Click domains ($test_name):Test failed ❌" >> all_test_results.txt
-            test_result=$(<"test_${test_name}_results.txt")
-            if [ "$test_result" = "Test passed successfully" ]; then
-              results+="Click domains ($test_name):Test passed successfully ✅\n"
-            else
-              results+="Click domains ($test_name):Test failed ❌\n"
-            fi
-          done
-      
+          results=$(<all_test_results.txt)
+          
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\" }" $SLACK_WEBHOOK_URL
