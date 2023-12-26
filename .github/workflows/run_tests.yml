@@ -56,11 +56,12 @@ jobs:
       - name: Install Xvfb
         run: sudo apt-get install xvfb
 
-      - name: Run tests and set results
+      - name: Run tests and send results to Slack
         run: |
           results=""
-          for test_name in "${{ matrix.domain }}"; do
-            pytest -n auto > "test_${test_name}.txt" || echo "Click domains ($test_name):Test failed ❌" >> all_test_results.txt
+          for test_name in txxx pornq upornia 100homemade chikiporn hclips hdzog hotmovs porn555 pornforrelax pornl puporn shemalez shemaleztube thegay tubepornclassic vjav voyeurhit; do
+            pytest -n 18 > "test_$test_name.txt" || echo "Test failed" > "test_${test_name}_results.txt"
+          
             test_result=$(<"test_${test_name}_results.txt")
             if [ "$test_result" = "Test passed successfully" ]; then
               results+="Click domains ($test_name):Test passed successfully ✅\n"
@@ -68,14 +69,6 @@ jobs:
               results+="Click domains ($test_name):Test failed ❌\n"
             fi
           done
-
-
+      
           echo "$results" > all_test_results.txt
-
-      - name: Send test results to Slack
-        if: always()
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-
-          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$(<all_test_results.txt)\" }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$results\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$results\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" ${{ secrets.SLACK_WEBHOOK_URL }}
