@@ -3,7 +3,6 @@ name: Automated tests
 on:
   push
 
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -58,7 +57,8 @@ jobs:
       - name: Start Xvfb
         run: |
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          sleep 3
+          sleep 5
+
       - name: Run tests and save the results
         run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
 
