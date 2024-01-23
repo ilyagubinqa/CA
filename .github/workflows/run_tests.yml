@@ -44,12 +44,10 @@ jobs:
           pip install selenium
           pip install requests
           pip install pytest-xdist
-
       - name: Install Chrome
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get install -o Dpkg::Options::="--force-confnew" --reinstall google-chrome-stable
-
       - name: Set DISPLAY variable
         run: echo "DISPLAY=:99" >> $GITHUB_ENV
 
@@ -60,22 +58,20 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           sleep 3
+      - name: Run tests and save the results
+        run: pytest -n auto > test_${{ matrix.domain }}.txt || echo "Test failed" > test_results.txt
 
+      - name: Use the test results
+        run: |
+          test_result=$(<test_${{ matrix.domain }}_results.txt)
+          if [ "$test_result" = "Test passed successfully" ]; then
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test passed successfully ✅" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=Click domains (${{ matrix.domain }}):Test failed ❌" >> $GITHUB_ENV
+          fi
       - name: Send test results to Slack
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          results=""
-          for test_name in "${{ matrix.domain }}"; do
-            pytest -n auto > "test_${test_name}.txt" || echo "Click domains ($test_name):Test failed ❌" >> all_test_results.txt
-            test_result=$(<"test_${test_name}_results.txt")
-            if [ "$test_result" = "Test passed successfully" ]; then
-              results+="Click domains ($test_name):Test passed successfully ✅\n"
-            else
-              results+="Click domains ($test_name):Test failed ❌\n"
-            fi
-          done
-      
-          echo "{\"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"$results\"}}]}" > slack_payload.json
-          curl -X POST -H 'Content-type: application/json' --data @slack_payload.json $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
