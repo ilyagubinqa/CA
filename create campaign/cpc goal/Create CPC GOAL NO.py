@@ -36,8 +36,8 @@ def test_web_push(browser):
     element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[2]/div[2]/div[1]/div[2]/div/div[4]/a/span/span[2]')))
     element.click()
 
-    # Выбор попандера
-    webpush = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Popunder ')]"))))
+    # Выбор веб пуша
+    webpush = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),'Web-push ')]"))))
     webpush.click()
     time.sleep(5)
 
@@ -57,14 +57,14 @@ def test_web_push(browser):
     countries.click()
     goal_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div/div')))
     ActionChains(browser).click(goal_countries).perform()
-    ActionChains(browser).send_keys('10').perform()
+    ActionChains(browser).send_keys('4').perform()
 
     # Выбор креатива
     time.sleep(3)
     select_ad = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-ad-select')))
     select_ad.click()
     time.sleep(3)
-    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and contains(text(), 'ID 1017 \"test test 1\"')]")))
+    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test web push 2  (1 url)']")))
     add.click()
 
     # Запрос на создание кампании

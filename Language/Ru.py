@@ -8,34 +8,52 @@ from time import sleep
 import time
 
 # Инициализация драйвера и переход на страницу логина
-driver_service = Service(executable_path="C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe")
-driver = webdriver.Chrome(service=driver_service)
-driver.maximize_window()
-driver.get('https://app.staging1.clickadilla.com/login')
+from selenium import webdriver
+from selenium.webdriver import ActionChains, Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+import time
+import pytest
 
-wait = WebDriverWait(driver, 15)
+@pytest.fixture()
+def browser():
+    options = Options()
 
-# Ввод логина и пароля и вход в личный кабинет
-login_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name='username']")))
-login_input.send_keys('ilyagubin1234567@gmail.com')
-password_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@type='password']")))
-password_input.send_keys('ilyagubin1234567@gmail.com')
-send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
-send_button.click()
+    chrome_browser = webdriver.Chrome(options=options)
+    chrome_browser.implicitly_wait(26)
+    return chrome_browser
 
-# Выбор локали
-wait = WebDriverWait(driver, 5)
-language = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.ID, 'input-240')))
-language.click()
-ru = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.ID, 'list-item-353-1')))
-ru.click()
+def test_web_push(browser):
+    # Открытие браузера и переход на страницу регистрации
+    browser.maximize_window()
+    browser.get('https://staging-app.clickadilla.com/login')
 
-# Проверка локали
-time.sleep(3)
-status_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[2]/div[2]/div[1]/div[1]')))
-status = status_element.text
-if status == "Кампании":
-    print("Русская локаль сайта")
-else:
-    print("Failed")
-sleep(50)
+    # Ожидание появления полей и ввод данных для авторизации
+    wait = WebDriverWait(browser, 55)
+    login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
+    login_input.send_keys('ilyagubin1234567@gmail.com')
+    password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
+    password_input.send_keys('ilyagubin1234567@gmail.com')
+
+    # Отправка данных для авторизации и вход в личный кабинет
+    send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
+    send_button.click()
+
+    # Выбор локали
+    wait = WebDriverWait(browser, 15)
+    language = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),'English')]"))))
+    language.click()
+    ru = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Russian ')]"))))
+    ru.click()
+
+    # Проверка локали
+    time.sleep(3)
+    status_element = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),'Кампании')]"))))
+    status = status_element.text
+    if status == "Кампании":
+        print("Русская локаль сайта")
+    else:
+        print("Failed")
+    time.sleep(15)

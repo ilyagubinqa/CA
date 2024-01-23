@@ -57,7 +57,7 @@ def test_web_push(browser):
     countries.click()
     goal_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div/div')))
     ActionChains(browser).click(goal_countries).perform()
-    ActionChains(browser).send_keys('10').perform()
+    ActionChains(browser).send_keys('4').perform()
 
     # Выбор креатива
     time.sleep(3)
@@ -67,6 +67,16 @@ def test_web_push(browser):
     add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and contains(text(), 'ID 1017 \"test test 1\"')]")))
     add.click()
 
+    # Заполнение поля operating system
+    time.sleep(7)
+    system = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-operating-systems-select')))
+    system.click()
+    windows = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='Android']")))
+    windows.click()
+    version = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-operating-systems-android-version-field')))
+    ActionChains(browser).click(version).perform()
+    ActionChains(browser).send_keys('0').perform()
+
     # Запрос на создание кампании
     create = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Create campaign"]')))
     create.click()
@@ -74,14 +84,17 @@ def test_web_push(browser):
     time.sleep(2)
     continue_button.click()
 
-    # Вывод сообщения о создании кампании
-    time.sleep(3)
-    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[1]/div/text()')))
-    status = status_element.text
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, ("v-messages__message"))
 
-    if status == "campaign has been":
-        print("Your Campaign created successfully")
+    # Текст элемента
+    details_text = details_element.text
+
+    # Проверка на то, что ошибка содержит текст
+    error_message = "The targets.operating_system_target.operating_system_ids.0.operating_system_version must be at least 1."
+
+    if error_message in details_text:
+        print("Test passed successfully")
     else:
-        print("Failed to created Campaign")
-
-    time.sleep(70)
+        print("Test failed")
+    time.sleep(30)

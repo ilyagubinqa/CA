@@ -71,14 +71,6 @@ amount = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '
 amount.click()
 pyautogui.typewrite('10')
 
-# Выбор креатива
-time.sleep(10)
-select_ad = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[5]/div[2]/div/div[1]/div/div[2]/div/div/div[1]')))
-select_ad.click()
-time.sleep(3)
-add = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="list-item-1562-2"]/div')))
-add.click()
-
 # Запрос на создание кампании
 create = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div[2]/div/div/div[1]/div[1]/div/div/div[2]/div[5]/div[3]/button/span')))
 create.click()

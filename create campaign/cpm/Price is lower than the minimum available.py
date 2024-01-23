@@ -36,52 +36,50 @@ def test_web_push(browser):
     element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[2]/div[2]/div[1]/div[2]/div/div[4]/a/span/span[2]')))
     element.click()
 
-    # Выбор попандера
-    webpush = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Popunder ')]"))))
-    webpush.click()
+    # Выбор in stream
+    instream = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' In-stream ')]"))))
+    instream.click()
     time.sleep(5)
 
-    # Выбор гол модели
-    goal = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[1]/div[2]/div/div/div/div/div/div[2]/div[1]/div/div')))
-    goal.click()
+    # Заполнение campaign name
+    campaign_name = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-name-field')))
+    ActionChains(browser).click(campaign_name).perform()
+    ActionChains(browser).send_keys('test').perform()
     time.sleep(2)
+
+    # Заполнение campaign group
+    campaign_name = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-category-select')))
+    campaign_name.click()
+    time.sleep(1)
+    group = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test']")))
+    group.click()
+    time.sleep(7)
 
     # Заполнение поля с ценой
     amount = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-price-field')))
     ActionChains(browser).click(amount).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.DELETE).perform()
-    ActionChains(browser).send_keys('10').perform()
+    ActionChains(browser).send_keys('1').perform()
 
     # Выбор креатива
-    time.sleep(3)
+    time.sleep(7)
     select_ad = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-ad-select')))
     select_ad.click()
     time.sleep(3)
-    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and contains(text(), 'ID 1017 \"test test 1\"')]")))
+    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test in stream  (1 url)']")))
     add.click()
-
-    # Включение уников
-    uniques = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[12]/div[3]/div[1]/div/button[1]/span')))
-    uniques.click()
-    visitor = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-unique-count-field')))
-    ActionChains(browser).click(visitor).perform()
-    ActionChains(browser).send_keys('0').perform()
-    time.sleep(2)
 
     # Запрос на создание кампании
     create = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Create campaign"]')))
     create.click()
-    continue_button = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Continue"]')))
-    time.sleep(2)
-    continue_button.click()
 
     # Поиск ошибки
-    details_element = browser.find_element(By.CLASS_NAME, ("v-messages__message"))
+    details_element = browser.find_element(By.CLASS_NAME,("v-messages__message"))
 
     # Текст элемента
     details_text = details_element.text
 
     # Проверка на то, что ошибка содержит текст
-    error_message = "The view capping must be between 1 and 4294967295."
+    error_message = "Price is lower than the minimum available 1.3041."
 
     if error_message in details_text:
         print("Test passed successfully")

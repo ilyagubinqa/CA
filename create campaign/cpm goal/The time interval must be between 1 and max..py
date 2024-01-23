@@ -1,78 +1,98 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
+from selenium.webdriver.chrome.options import Options
 import time
-import pyautogui
+import pytest
 
-# Открытие браузера и переход на страницу регистрации
-driver_service = Service(executable_path="C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe")
-driver = webdriver.Chrome(service=driver_service)
-driver.maximize_window()
-driver.get('https://app.staging1.clickadilla.com/login')
+@pytest.fixture()
+def browser():
+    options = Options()
 
-# Ожидание появления полей и ввод данных для авторизации
-wait = WebDriverWait(driver, 55)
-login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-login_input.send_keys('test_selenium04@gmail.com')
-password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-password_input.send_keys('test_selenium04@gmail.com')
-send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
-send_button.click()
+    chrome_browser = webdriver.Chrome(options=options)
+    chrome_browser.implicitly_wait(26)
+    return chrome_browser
 
-# Переход в раздел Create campaign
-wait = WebDriverWait(driver, 60)
-element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[2]/div[2]/div[1]/div[2]/div/div[4]/a/span/span[2]')))
-element.click()
+def test_web_push(browser):
+    # Открытие браузера и переход на страницу регистрации
+    browser.maximize_window()
+    browser.get('https://staging-app.clickadilla.com/login')
 
-# Заполнение поля с ценой
-amount = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div[1]/div[1]/div/div[2]/div/div/div')))
-amount.click()
-pyautogui.typewrite('10')
+    # Ожидание появления полей и ввод данных для авторизации
+    wait = WebDriverWait(browser, 55)
+    login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
+    login_input.send_keys('ilyagubin1234567@gmail.com')
+    password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
+    password_input.send_keys('ilyagubin1234567@gmail.com')
 
-# Выбор гол модели
-goal = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[1]/div[2]/div/div/div/div/div/div[2]/div[1]/div/div')))
-goal.click()
+    # Отправка данных для авторизации и вход в личный кабинет
+    send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
+    send_button.click()
 
-# Выбор страны
-select_countries = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div/div/div[1]/div/div[2]/div/div/div[1]/div[1]')))
-select_countries.click()
-countries = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='Afghanistan']")))
-countries.click()
-goal_countries = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div/div')))
-goal_countries.click()
-pyautogui.typewrite('10')
+    # Переход в раздел Create campaign
+    wait = WebDriverWait(browser, 60)
+    element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[2]/div[2]/div[1]/div[2]/div/div[4]/a/span/span[2]')))
+    element.click()
 
-# Выбор креатива
-time.sleep(3)
-select_ad = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[6]/div[2]/div/div[1]/div/div[2]/div/div/div[1]/div[1]')))
-select_ad.click()
-time.sleep(3)
-add = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[3]/div/div[2]/div/div')))
-add.click()
+    # Выбор попандера
+    webpush = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Popunder ')]"))))
+    webpush.click()
+    time.sleep(5)
 
-# Включение уников
-uniques = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[12]/div[3]/div[1]/div/button[1]/span')))
-uniques.click()
-minute = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[2]/div[4]/div/div/div/div[3]/div[2]/div/div[2]/div/div/div[1]/div')))
-minute.click()
-pyautogui.typewrite('0')
+    # Выбор гол модели
+    goal = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[1]/div[2]/div/div/div/div/div/div[2]/div[1]/div/div')))
+    goal.click()
+    time.sleep(2)
 
-# Создание кампании
-create = WebDriverWait(driver, 40).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/button/span')))
-create.click()
-continue_button = WebDriverWait(driver, 40).until(EC.element_to_be_clickable((By.XPATH,  '//*[@id="app"]/div[5]/div/div/div[3]/button/span/span')))
-continue_button.click()
+    # Выбор Conversion type
+    select_conversion_type = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()=" View Content "]')))
+    select_conversion_type.click()
 
-# Вывод сообщения об ошибке
-time.sleep(10)
-error_element = driver.find_element(By.CSS_SELECTOR, ".v-messages__message")
-error_message = error_element.text
-print(error_message)
+    # Выбор страны
+    select_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div/div/div[1]/div/div[2]/div/div/div[1]/div[1]')))
+    select_countries.click()
+    countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='Afghanistan']")))
+    countries.click()
+    goal_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div/div')))
+    ActionChains(browser).click(goal_countries).perform()
+    ActionChains(browser).send_keys('10').perform()
 
-sleep(40)
+    # Выбор креатива
+    time.sleep(3)
+    select_ad = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-ad-select')))
+    select_ad.click()
+    time.sleep(3)
+    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and contains(text(), 'ID 1017 \"test test 1\"')]")))
+    add.click()
 
+    # Включение уников
+    uniques = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[12]/div[3]/div[1]/div/button[1]/span')))
+    uniques.click()
+    minute = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-unique-time-field')))
+    ActionChains(browser).click(minute).perform()
+    ActionChains(browser).send_keys('0').perform()
+    time.sleep(2)
 
+    # Запрос на создание кампании
+    create = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Create campaign"]')))
+    create.click()
+    continue_button = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Continue"]')))
+    time.sleep(2)
+    continue_button.click()
 
+    # Поиск ошибки
+    details_element = browser.find_element(By.CLASS_NAME, ("v-messages__message"))
+
+    # Текст элемента
+    details_text = details_element.text
+
+    # Проверка на то, что ошибка содержит текст
+    error_message = "The time interval must be between 1 and max."
+
+    if error_message in details_text:
+        print("Test passed successfully")
+    else:
+        print("Test failed")
+    time.sleep(30)

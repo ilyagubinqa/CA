@@ -42,10 +42,22 @@ pyautogui.typewrite('https://tracking.clickadilla.com_id=[CAMPAIGN_ID]&click_id=
 testbutton = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[4]/div[2]/div[1]/div/div[1]/div[2]/button/span')))
 testbutton.click()
 
-# Вывод сообщения об ошибке
-time.sleep(2)
-error_element = driver.find_element(By.CSS_SELECTOR, ".v-messages__message")
-error_message = error_element.text
-print(error_message)
+# Отправка данных для авторизации и вход в личный кабинет
+send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
+send_button.click()
 
-sleep(30)
+# Поиск ошибки
+details_element = browser.find_element(By.CLASS_NAME, "v-messages__message")
+
+# Текст элемента
+details_text = details_element.text
+
+# Проверка на то, что ошибка содержит текст
+error_message = "These credentials do not match our records."
+
+if error_message in details_text:
+    print("Test passed successfully")
+else:
+    print("Test failed")
+
+time.sleep(35)

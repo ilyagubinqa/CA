@@ -1,116 +1,121 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
+from selenium.webdriver.chrome.options import Options
 import time
-import pyautogui
+import pytest
 
-# Открытие браузера и переход на страницу регистрации
-driver_service = Service(executable_path="C:\Program Files\Webdriver\chromedriver-win64\chromedriver.exe")
-driver = webdriver.Chrome(service=driver_service)
-driver.maximize_window()
-driver.get('https://app.staging1.clickadilla.com/login')
+@pytest.fixture()
+def browser():
+    options = Options()
 
-# Ожидание появления полей и ввод данных для авторизации
-wait = WebDriverWait(driver, 55)
-login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-login_input.send_keys('test_selenium04@gmail.com')
-password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-password_input.send_keys('test_selenium04@gmail.com')
-send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
-send_button.click()
+    chrome_browser = webdriver.Chrome(options=options)
+    chrome_browser.implicitly_wait(26)
+    return chrome_browser
 
-# Ожидание появления полей и ввод данных для авторизации
-wait = WebDriverWait(driver, 55)
-login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
-login_input.send_keys('test@test.ru')
-login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
-login_input.send_keys('secret')
+def test_web_push(browser):
+    # Открытие браузера и переход на страницу регистрации
+    browser.maximize_window()
+    browser.get('https://staging-app.clickadilla.com/login')
 
-# Отправка данных для авторизации и вход в личный кабинет
-send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
-send_button.click()
+    # Ожидание появления полей и ввод данных для авторизации
+    wait = WebDriverWait(browser, 55)
+    login_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-email-field")))
+    login_input.send_keys('ilyagubin1234567@gmail.com')
+    password_input = wait.until(EC.element_to_be_clickable((By.ID, "selenium-test-login-password-field")))
+    password_input.send_keys('ilyagubin1234567@gmail.com')
 
-# Переход в раздел Create campaign
-wait = WebDriverWait(driver, 60)
-element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[2]/div[2]/div[1]/div[2]/div/div[4]/a/span/span[2]')))
-element.click()
+    # Отправка данных для авторизации и вход в личный кабинет
+    send_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content")))
+    send_button.click()
 
-# Заполнение поля с ценой
-amount = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div[1]/div[1]/div/div[2]/div/div/div')))
-amount.click()
-pyautogui.typewrite('10')
+    # Переход в раздел Create campaign
+    wait = WebDriverWait(browser, 60)
+    element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[2]/div[2]/div[1]/div[2]/div/div[4]/a/span/span[2]')))
+    element.click()
 
-# Выбор веб пуша
-webpush = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[3]/div[2]/div[2]/div[2]/div/div[5]/button/span/div')))
-webpush.click()
+    # Выбор веб пуша
+    webpush = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),'Web-push ')]"))))
+    webpush.click()
+    time.sleep(5)
 
-# Заполнение campaign name
-campaign_name = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[3]/div[2]/div[4]/div[1]/div/div[2]/div/div/div')))
-campaign_name.click()
-pyautogui.typewrite('test_company')
+    # Заполнение campaign name
+    campaign_name = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-name-field')))
+    ActionChains(browser).click(campaign_name).perform()
+    ActionChains(browser).send_keys('test').perform()
+    time.sleep(2)
 
-# Заполнение campaign group
-campaign_name = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[3]/div[2]/div[4]/div[2]/div/div[2]/div/div/div/div[2]/div/div/div[1]/div[1]')))
-campaign_name.click()
-time.sleep(1)
-group = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='pamagiti']")))
-group.click()
+    # Заполнение campaign group
+    campaign_name = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-category-select')))
+    campaign_name.click()
+    time.sleep(1)
+    group = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test']")))
+    group.click()
+    time.sleep(7)
 
-# Выбор креатива
-time.sleep(3)
-select_ad = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[7]/div[2]/div/div[1]/div/div[2]/div/div/div[1]/div[1]')))
-select_ad.click()
-time.sleep(3)
-add = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[4]/div/div[2]/div/div')))
-add.click()
+    # Заполнение поля с ценой
+    amount = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-price-field')))
+    ActionChains(browser).click(amount).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.DELETE).perform()
+    ActionChains(browser).send_keys('8').perform()
 
-# Заполненеие поля с sub period
-days = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[5]/div[2]/div/div/div/div[2]/button[2]/span')))
-days.click()
+    # Заполненеие поля с sub period
+    days = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[5]/div[2]/div/div/div/div[2]/button[2]/span')))
+    days.click()
 
-# Заполнение Traffic quality
-qaulity = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[6]/div[2]/div/div[1]/div[1]/div[2]/button[1]/span')))
-qaulity.click()
+    # Заполнение Traffic quality
+    qaulity = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[6]/div[2]/div/div[1]/div[1]/div[2]/button[1]/span')))
+    qaulity.click()
 
-# Выбор categories
-categories = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[8]/div[2]/div/div/div/div[1]/div/div[1]/div/div/div')))
-categories.click()
+    # Выбор креатива
+    time.sleep(3)
+    select_ad = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-ad-select')))
+    select_ad.click()
+    time.sleep(3)
+    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test web push 2  (1 url)']")))
+    add.click()
 
-# Выбор hourly limits
-hourhy_limits = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[12]/div[2]/div[1]/div/div[2]/div/div/div')))
-hourhy_limits.click()
-pyautogui.typewrite('10')
+    # Выбор categories
+    categories = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[8]/div[2]/div/div/div/div[1]/div/div[1]/div/div/div')))
+    categories.click()
 
-# Выбор daily limits
-daily_limits = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[12]/div[2]/div[2]/div/div[2]/div/div/div')))
-daily_limits.click()
-pyautogui.typewrite('11')
+    # Выбор hourly limits
+    hourhy_limits = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-hourly-limit-field')))
+    ActionChains(browser).click(hourhy_limits).perform()
+    ActionChains(browser).send_keys('10').perform()
+    time.sleep(2)
 
-# Выбор total limits
-total_limits = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[12]/div[2]/div[3]/div/div[2]/div/div/div')))
-total_limits.click()
-pyautogui.typewrite('12')
+    # Выбор daily limits
+    daily_limits = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-daily-limit-field')))
+    ActionChains(browser).click(daily_limits).perform()
+    ActionChains(browser).send_keys('11').perform()
+    time.sleep(2)
 
-# Выбор импрессий
-impressions = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[12]/div[2]/div[3]/div/div[2]/div/div/div')))
-impressions.click()
-pyautogui.typewrite('17')
+    # Выбор total limits
+    total_limits = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-total-limit-field')))
+    ActionChains(browser).click(total_limits).perform()
+    ActionChains(browser).send_keys('12').perform()
+    time.sleep(2)
 
-# Запрос на создание кампании
-create = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div[2]/div/div/div[1]/div[1]/div/div/div[2]/div[5]/div[3]/button/span')))
-create.click()
+    # Выбор импрессий
+    impressions = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-smooth-spend-field')))
+    ActionChains(browser).click(impressions).perform()
+    ActionChains(browser).send_keys('17').perform()
+    time.sleep(2)
 
-# Вывод сообщения о создании кампании
-time.sleep(3)
-status_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[1]/div/text()')))
-status = status_element.text
+    # Запрос на создание кампании
+    create = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Create campaign"]')))
+    create.click()
 
-if status == "campaign has been":
-    print("Your Campaign created successfully")
-else:
-    print("Failed to created Campaign")
+    # Вывод сообщения о создании кампании
+    time.sleep(3)
+    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[1]/div/text()')))
+    status = status_element.text
 
-sleep(70)
+    if status == "campaign has been":
+        print("Your Campaign created successfully")
+    else:
+        print("Failed to created Campaign")
+
+    time.sleep(70)
