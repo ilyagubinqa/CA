@@ -78,8 +78,8 @@ jobs:
         run: |
           curl -X POST -H 'Content-type: application/json' --data "{ \"text\": \"$TEST_STATUS\", \"blocks\": [ { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"$TEST_STATUS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\" } } ] }" $SLACK_WEBHOOK_URL
 
-        manual-trigger:
-          runs-on: ubuntu-latest
-          steps:
-            - name: Run manual test trigger
-              run: echo "Manual test trigger executed"
+  manual-trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run manual test trigger
+        run: echo "Manual test trigger executed"
