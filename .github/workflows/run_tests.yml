@@ -1,7 +1,8 @@
 name: Automated tests
 
 on:
-  push
+  push:
+  workflow_dispatch:
 
 jobs:
   test:
