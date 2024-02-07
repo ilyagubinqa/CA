@@ -36,55 +36,49 @@ def test_web_push(browser):
     element = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div/div[2]/div[2]/div[1]/div[2]/div/div[4]/a/span/span[2]')))
     element.click()
 
-    # Выбор попандера
-    webpush = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Popunder ')]"))))
-    webpush.click()
+    # Выбор in stream
     time.sleep(5)
+    instream = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' In-stream ')]"))))
+    instream.click()
 
-    # Выбор гол модели
-    goal = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' cpm goal ')]"))))
-    goal.click()
-    time.sleep(2)
-
-    # Выбор Conversion type
-    select_conversion_type = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()=" View Content "]')))
-    select_conversion_type.click()
-
-    # Выбор страны
-    select_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-goal-countries-select-0')))
-    select_countries.click()
-    countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='Afghanistan']")))
-    countries.click()
-    goal_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-goal-value-field-0')))
-    ActionChains(browser).click(goal_countries).perform()
-    ActionChains(browser).send_keys('1').perform()
+    # Заполнение поля с ценой
+    time.sleep(10)
+    amount = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-price-field')))
+    ActionChains(browser).click(amount).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.DELETE).perform()
+    ActionChains(browser).send_keys('8').perform()
 
     # Выбор креатива
-    time.sleep(3)
+    time.sleep(5)
     select_ad = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-ad-select')))
     select_ad.click()
-    time.sleep(3)
-    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and contains(text(), 'ID 1017 \"test test 1\"')]")))
+    time.sleep(5)
+    add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test in stream  (1 url)']")))
     add.click()
+
+    # Заполнение поля multiple search
+    multiple_search = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Multiple search ')]"))))
+    multiple_search.click()
+    search_sites = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-multiple-adder-field')))
+    ActionChains(browser).click(search_sites).perform()
+    ActionChains(browser).send_keys('test').perform()
+    search1 = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),'Search ')]"))))
+    search1.click()
+    add_sites = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Add found sites ')]"))))
+    add_sites.click()
+    time.sleep(2)
 
     # Запрос на создание кампании
     create = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Create campaign"]')))
     create.click()
-    continue_button = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Continue"]')))
-    time.sleep(2)
-    continue_button.click()
 
-    # Поиск ошибки
-    details_element = browser.find_element(By.CLASS_NAME, ("v-messages__message"))
+    # Вывод сообщения о создании кампании
+    time.sleep(3)
+    status_element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/main/div/div/div/div[1]/div/text()')))
+    status = status_element.text
 
-    # Текст элемента
-    details_text = details_element.text
-
-    # Проверка на то, что ошибка содержит текст
-    error_message = "Price is lower than the minimum available 8.0458."
-
-    if error_message in details_text:
-        print("Test passed successfully")
+    if status == "campaign has been":
+        print("Your Campaign created successfully")
     else:
-        print("Test failed")
-    time.sleep(30)
+        print("Failed to created Campaign")
+
+    time.sleep(70)

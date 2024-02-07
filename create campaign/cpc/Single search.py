@@ -61,7 +61,7 @@ def test_web_push(browser):
     ActionChains(browser).click(search_sites).perform()
     ActionChains(browser).send_keys('test51').perform()
     time.sleep(2)
-    site = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test51']")))
+    site = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),'test51')]"))))
     site.click()
     time.sleep(2)
 

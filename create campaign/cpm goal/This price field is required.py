@@ -55,9 +55,6 @@ def test_web_push(browser):
     select_countries.click()
     countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='Afghanistan']")))
     countries.click()
-    goal_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-goal-value-field-0')))
-    ActionChains(browser).click(goal_countries).perform()
-    ActionChains(browser).send_keys('1').perform()
 
     # Выбор креатива
     time.sleep(3)
@@ -81,7 +78,7 @@ def test_web_push(browser):
     details_text = details_element.text
 
     # Проверка на то, что ошибка содержит текст
-    error_message = "Price is lower than the minimum available 8.0458."
+    error_message = "This price field is required."
 
     if error_message in details_text:
         print("Test passed successfully")

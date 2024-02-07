@@ -42,7 +42,7 @@ def test_web_push(browser):
     time.sleep(5)
 
     # Выбор гол модели
-    goal = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[1]/div[2]/div/div/div/div/div/div[2]/div[1]/div/div')))
+    goal = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' cpc goal ')]"))))
     goal.click()
     time.sleep(2)
 
@@ -58,7 +58,6 @@ def test_web_push(browser):
     goal_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div/div')))
     ActionChains(browser).click(goal_countries).perform()
     ActionChains(browser).send_keys('4').perform()
-
 
     # Запрос на создание кампании
     create = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()="Create campaign"]')))

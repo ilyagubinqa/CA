@@ -47,14 +47,14 @@ def test_web_push(browser):
     ActionChains(browser).send_keys('8').perform()
 
     # Выбор креатива
-    time.sleep(3)
+    time.sleep(5)
     select_ad = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-ad-select')))
     select_ad.click()
-    time.sleep(3)
+    time.sleep(5)
     add = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='test web push 2  (1 url)']")))
     add.click()
 
-    # Заполненеие поля multiple search
+    # Заполнение поля multiple search
     multiple_search = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Multiple search ')]"))))
     multiple_search.click()
     search_sites = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-multiple-adder-field')))
@@ -62,6 +62,8 @@ def test_web_push(browser):
     ActionChains(browser).send_keys('test').perform()
     search1 = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),'Search ')]"))))
     search1.click()
+    add_sites = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' Add found sites ')]"))))
+    add_sites.click()
     time.sleep(2)
 
     # Запрос на создание кампании

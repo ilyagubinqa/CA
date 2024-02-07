@@ -42,13 +42,21 @@ def test_web_push(browser):
     time.sleep(5)
 
     # Выбор гол модели
-    goal = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[1]/main/div/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div[1]/div[2]/div/div/div/div/div/div[2]/div[1]/div/div')))
+    goal = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.XPATH, ("//*[contains(text(),' cpc goal ')]"))))
     goal.click()
     time.sleep(2)
 
-    # Заполнение поля с ценой
-    amount = WebDriverWait(browser, 60).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-price-field')))
-    ActionChains(browser).click(amount).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.DELETE).perform()
+    # Выбор Conversion type
+    select_conversion_type = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//span[text()=" View Content "]')))
+    select_conversion_type.click()
+
+    # Выбор страны
+    select_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-goal-countries-select-0')))
+    select_countries.click()
+    countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='v-list-item__title' and text()='Afghanistan']")))
+    countries.click()
+    goal_countries = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.ID, 'selenium-test-campaign-form-goal-value-field-0')))
+    ActionChains(browser).click(goal_countries).perform()
     ActionChains(browser).send_keys('10').perform()
 
     # Выбор креатива
